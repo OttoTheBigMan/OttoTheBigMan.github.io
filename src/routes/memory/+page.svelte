@@ -21,9 +21,9 @@
     }
     shuffleArray(cards)
     function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
         array[i] = array[j];
         array[j] = temp;
     }
@@ -95,6 +95,82 @@
         window.requestAnimationFrame(DoFrame)
     }
 
+//Bakgrund grejer
+
+let complexTransitionTime = 3000    // <-- for complex animation
+    let transitionTime = 1000           // <-- 100 ms - time our animation will last
+    let previousTime, start = 0;        // <-- stores data on animation
+    let angle = 135;                    // <-- angle of gradient
+    let animationDirection = 'forwards' // <-- stores the animation direction
+    let complexAnDirection = 'forwards' // <-- for continuous animation
+    let element = 'gradient-button-transition'; // <-- id of our button
+    let intervalFrame;                          // <-- stores the interval frame
+    let complexIntervalFrame;                   // <-- for 'always on' gradient transition
+    let currentPct = 0;                         // <-- current percentage through the animation
+    let complexCurrentPct = 0;                  // <-- current pct for complex animation
+    let elapsed = 0;                            // <-- number of frames which have ellapsed 
+    let complexElapsed = 0;                     // <-- complex elapsed time
+
+const getColor = function(pct, colorSet) {
+  for (let i = 1; i < colorSet.length - 1; i++) {
+    if (pct < colorSet[i].pct) {
+        break;
+      }
+    }
+  let lower = colorSet[i - 1];
+  let upper = colorSet[i];
+  let range = upper.pct - lower.pct;
+  let rangePct = (pct - lower.pct) / range;
+  let pctLower = 1 - rangePct;
+  let pctUpper = rangePct;
+  let color = {
+      r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+      g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+      b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+  }
+  return `rgb(${color.r}, ${color.g}, ${color.b})`;
+}
+let time
+const complexGradientAnimation = function() {
+        if(complexIntervalFrame === undefined) {
+            complexIntervalFrame = setInterval(() => {
+                let time = complexTransitionTime / 1000;
+                let numberOfFrames = time * 60; // 60 frames per second -> 1 second = 60 frames
+                
+                if(complexCurrentPct === 100) {
+                    complexAnDirection = 'backwards';
+                }
+                else if(complexCurrentPct === 0) {
+                    complexAnDirection = 'forwards';
+                }
+                // If the animation is going forward
+                if(complexAnDirection == 'forwards') {
+                    // Add 1 to elapsed
+                    complexElapsed += 1;
+                    // The elapsed frames out of max frames
+                    complexCurrentPct = Math.min(complexElapsed / numberOfFrames, 1) * 100;
+                }
+                else if(complexAnDirection === 'backwards') {
+                    // Otherwise we're going back - subtract 1 from ellapsed
+                    complexElapsed -= 1;
+                    // The elapsed frames out of max frames
+                    complexCurrentPct = Math.max(complexElapsed / numberOfFrames, 0) * 100;
+                }
+
+                // Calculate current color in this time for each gradient color
+                let colorOne = getColor(complexCurrentPct, complexGradientOne);
+                let colorTwo = getColor(complexCurrentPct, complexGradientTwo);
+
+                // Generate CSS string
+                let generateGradient = `linear-gradient(${angle}deg, ${colorOne}, ${colorTwo})`;
+
+                // Add it to our background.
+                body.style.backgroundImage = generateGradient;
+
+            }, 16.667); // 60 frames per second
+        }
+    };
+
 
   </script>
   <body bind:this={body}>
@@ -122,6 +198,21 @@
   </main>
 </body>
   <style>
+@keyframes bgFade{
+  0% {background: linear-gradient(135deg, rgb(255,0,0), rgb(128, 0, 0));}
+  9% {background: linear-gradient(135deg, rgb(255,128,0), rgb(128, 64, 0));}
+  18% {background: linear-gradient(135deg, rgb(255,255,0), rgb(128, 128, 0));}
+  27% {background: linear-gradient(135deg, rgb(128,255,0), rgb(64, 128, 0));}
+  36% {background: linear-gradient(135deg, rgb(0,255,0), rgb(0, 255, 0));}
+  45% {background: linear-gradient(135deg, rgb(0,255,128), rgb(0, 255, 128));}
+  54% {background: linear-gradient(135deg, rgb(0,255,255), rgb(0, 128, 128));}
+  63% {background: linear-gradient(135deg, rgb(0,128,255), rgb(0, 64, 128));}
+  72% {background: linear-gradient(135deg, rgb(0,0,255), rgb(0, 0, 128));}
+  81% {background: linear-gradient(135deg, rgb(128,0,255), rgb(64, 0, 128));}
+  90% {background: linear-gradient(135deg, rgb(255,0,255), rgb(128, 0, 128));}
+  100% {background: linear-gradient(135deg, rgb(255,0,128), rgb(128, 0, 64));}
+}
+
     h1{
       text-align: center;
     }
@@ -133,12 +224,14 @@
     body{
       margin: 0;
       
+      /* animation-name: bgFade;
+      animation-duration: 5s;
+      animation-timing-function: ease-in-out;
+      animation-play-state: running;
+      animation-iteration-count: infinite;       */
 
-      background-position: 0px 0px, 10px 10px;
-    background-size: 20px 20px;
-    background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
-
-      animation: anim 2s 2s forward;
+      background: linear-gradient(135deg, #ff7147,  #e0417f);
+      transition: all 0.1s ease-out;
 
       height: 100vh;
       width: 100vw;
