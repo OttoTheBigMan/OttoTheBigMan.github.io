@@ -165,7 +165,7 @@
         if(skull != null){
             skull.style.left = (50 + 40 * Math.sin(sec)).toString() + "%";
             skull.style.top = (20 + 40 * Math.cos(sec)).toString() + "%";
-            skull.style.transform = `translate(-50%, 0) rotateZ(${rotation}deg)`
+            skull.style.transform = `translate3d(-50%, 0, 0) rotateZ(${rotation}deg)`
         }
 
         window.requestAnimationFrame(DoFrame)
@@ -287,6 +287,7 @@
     }
     .skullImage {
         /* margin: 10px auto; */
+        transform-style: preserve-3d;
         position: absolute;
         left: 50%;
         transform: translate(-50%, 0);

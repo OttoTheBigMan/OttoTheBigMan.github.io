@@ -13,10 +13,12 @@
     let startNums = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7];
     for (let index = 0; index < 16; index++) {
       cards.push({
+        listIndex: index,
         id: startNums[index], // TODO: unique ids per card card
         img: imgs[startNums[index]],
         flipped: false,  
         completed: false,
+        flippedBefore: false
       });
     }
     shuffleArray(cards)
@@ -32,7 +34,7 @@
     function flip(card) {
 
       if(card.flipped){
-        alert("bruv");
+        alert("bruh");
         return;
       }
 
@@ -46,24 +48,42 @@
         flipcount++;
         // flip the cards over after 1.5s from seeing both cards
         if (flipcount == 2) {
+          //Me when flip two cards
           let temp = undefined;
+          let temp2 = undefined;
           cards.forEach((card) => {
             if(card.flipped && temp == undefined && !card.completed){
               temp = card;
+            
             }else if(card.flipped && temp != undefined && !card.completed){
-              if(temp.id == card.id){
+              
+              if(temp2 == undefined && card.flipped && !card.completed && card.listIndex != temp.listIndex){
+                temp2 = card;
+              }
+
+              if(temp2 != undefined && temp.id == temp2.id){
                 temp.completed = true;
-                card.completed = true;
+                temp2.completed = true;
                 match = true;
                 return;
               }
             }
           });
+          pickCards(temp, temp2);
+          temp2.flippedBefore = true;
+          temp.flippedBefore = true;
           if(match){
             // flip over cards that have not been marked as "completed"
+            let done = true;
             cards.forEach((card) => {
               card.flipped = card.completed;
+              if(!card.completed){
+                done = false;
+              }
             });
+            if(done){
+              finishGame()
+            }
             flipcount = 0;
             cards = cards;
           }
@@ -73,6 +93,7 @@
             cards.forEach((card) => {
               card.flipped = card.completed;
             });
+            
             flipcount = 0;
             cards = cards;
           }, 1500);
@@ -84,93 +105,48 @@
       }
     }
     let body;
-    function DoFrame(time){
-        let sec = time / 1000;
+    
 
-        rotation+=5
-        if(body != null){
-            body.style.transform = `translate(-50%, 0) rotateZ(${rotation}deg)`
-        }
+//SCORE SYSTEM STUFF BABY!!!!!
 
-        window.requestAnimationFrame(DoFrame)
-    }
-
-//Bakgrund grejer
-
-let complexTransitionTime = 3000    // <-- for complex animation
-    let transitionTime = 1000           // <-- 100 ms - time our animation will last
-    let previousTime, start = 0;        // <-- stores data on animation
-    let angle = 135;                    // <-- angle of gradient
-    let animationDirection = 'forwards' // <-- stores the animation direction
-    let complexAnDirection = 'forwards' // <-- for continuous animation
-    let element = 'gradient-button-transition'; // <-- id of our button
-    let intervalFrame;                          // <-- stores the interval frame
-    let complexIntervalFrame;                   // <-- for 'always on' gradient transition
-    let currentPct = 0;                         // <-- current percentage through the animation
-    let complexCurrentPct = 0;                  // <-- current pct for complex animation
-    let elapsed = 0;                            // <-- number of frames which have ellapsed 
-    let complexElapsed = 0;                     // <-- complex elapsed time
-
-const getColor = function(pct, colorSet) {
-  for (let i = 1; i < colorSet.length - 1; i++) {
-    if (pct < colorSet[i].pct) {
-        break;
-      }
-    }
-  let lower = colorSet[i - 1];
-  let upper = colorSet[i];
-  let range = upper.pct - lower.pct;
-  let rangePct = (pct - lower.pct) / range;
-  let pctLower = 1 - rangePct;
-  let pctUpper = rangePct;
-  let color = {
-      r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
-      g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
-      b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
-  }
-  return `rgb(${color.r}, ${color.g}, ${color.b})`;
+let score = 0;
+let tries = 0;
+let highScore = localStorage.getItem("highScore")
+if(highScore == undefined){
+  highScore = 0;
 }
-let time
-const complexGradientAnimation = function() {
-        if(complexIntervalFrame === undefined) {
-            complexIntervalFrame = setInterval(() => {
-                let time = complexTransitionTime / 1000;
-                let numberOfFrames = time * 60; // 60 frames per second -> 1 second = 60 frames
-                
-                if(complexCurrentPct === 100) {
-                    complexAnDirection = 'backwards';
-                }
-                else if(complexCurrentPct === 0) {
-                    complexAnDirection = 'forwards';
-                }
-                // If the animation is going forward
-                if(complexAnDirection == 'forwards') {
-                    // Add 1 to elapsed
-                    complexElapsed += 1;
-                    // The elapsed frames out of max frames
-                    complexCurrentPct = Math.min(complexElapsed / numberOfFrames, 1) * 100;
-                }
-                else if(complexAnDirection === 'backwards') {
-                    // Otherwise we're going back - subtract 1 from ellapsed
-                    complexElapsed -= 1;
-                    // The elapsed frames out of max frames
-                    complexCurrentPct = Math.max(complexElapsed / numberOfFrames, 0) * 100;
-                }
 
-                // Calculate current color in this time for each gradient color
-                let colorOne = getColor(complexCurrentPct, complexGradientOne);
-                let colorTwo = getColor(complexCurrentPct, complexGradientTwo);
-
-                // Generate CSS string
-                let generateGradient = `linear-gradient(${angle}deg, ${colorOne}, ${colorTwo})`;
-
-                // Add it to our background.
-                body.style.backgroundImage = generateGradient;
-
-            }, 16.667); // 60 frames per second
-        }
-    };
-
+function finishGame(){
+  console.log("FInsh da gam")
+  if(score > highScore){
+    localStorage.setItem("highScore", score)
+    highScore = score;
+  }
+}
+function pickCards(card1, card2){
+  // console.log(card1.listIndex, card2.listIndex)
+  tries++;
+  
+  if(card1.img == card2.img){
+    //If the cards match
+    score += 15;
+    // card1.img = "https://upload.wikimedia.org/wikipedia/en/0/03/Walter_White_S5B.png"
+    // card2.img = "https://upload.wikimedia.org/wikipedia/en/0/03/Walter_White_S5B.png"
+  }
+  else{
+    score -= 5;
+    return;
+  }
+  //If both the cards are new
+  if(!card1.flippedBefore && !card2.flippedBefore){
+    score += 10;
+  }
+  //If one of the cards is new
+  else if(!card1.flippedBefore || !card2.flippedBefore){
+    score += 5;
+  }
+  
+}
 
   </script>
   <body bind:this={body}>
@@ -194,24 +170,21 @@ const complexGradientAnimation = function() {
           <img class="back" src="https://cdnb.artstation.com/p/assets/images/images/012/680/911/large/kathryn-raccuglia-character-card-back.jpg?1535999441" alt="" />
         </div>
       {/each}
+    </div >
+    <div class="score">
+      <p>Tries: {tries}</p>
+      <p>Current score: {score}</p>
+      <p>High score: {highScore}</p>
+    </div>
+    <div class="restartDiv">
+      <button onClick="window.location.reload();">
+        RESTART
+      </button>
     </div>
   </main>
 </body>
   <style>
-@keyframes bgFade{
-  0% {background: linear-gradient(135deg, rgb(255,0,0), rgb(128, 0, 0));}
-  9% {background: linear-gradient(135deg, rgb(255,128,0), rgb(128, 64, 0));}
-  18% {background: linear-gradient(135deg, rgb(255,255,0), rgb(128, 128, 0));}
-  27% {background: linear-gradient(135deg, rgb(128,255,0), rgb(64, 128, 0));}
-  36% {background: linear-gradient(135deg, rgb(0,255,0), rgb(0, 255, 0));}
-  45% {background: linear-gradient(135deg, rgb(0,255,128), rgb(0, 255, 128));}
-  54% {background: linear-gradient(135deg, rgb(0,255,255), rgb(0, 128, 128));}
-  63% {background: linear-gradient(135deg, rgb(0,128,255), rgb(0, 64, 128));}
-  72% {background: linear-gradient(135deg, rgb(0,0,255), rgb(0, 0, 128));}
-  81% {background: linear-gradient(135deg, rgb(128,0,255), rgb(64, 0, 128));}
-  90% {background: linear-gradient(135deg, rgb(255,0,255), rgb(128, 0, 128));}
-  100% {background: linear-gradient(135deg, rgb(255,0,128), rgb(128, 0, 64));}
-}
+
 
     h1{
       text-align: center;
@@ -222,16 +195,16 @@ const complexGradientAnimation = function() {
       overflow: hidden;
     }
     body{
-      margin: 0;
+      /* margin: 0; */
       
-      /* animation-name: bgFade;
-      animation-duration: 5s;
+      /* animation-name: gradient;
+      animation-duration: 15s;
       animation-timing-function: ease-in-out;
-      animation-play-state: running;
-      animation-iteration-count: infinite;       */
-
-      background: linear-gradient(135deg, #ff7147,  #e0417f);
-      transition: all 0.1s ease-out;
+      animation-iteration-count: infinite;    */
+      
+      /* animation-play-state:running; */
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      /* transition: all 0.1s ease-out; */
 
       height: 100vh;
       width: 100vw;
@@ -241,13 +214,29 @@ const complexGradientAnimation = function() {
       place-content: center;
       place-items: center;
     }
-  
+    h1{
+      font-family: sans-serif;
+      font-weight: 700;
+    }
+    .score{
+      position:absolute;
+      right: 30px;
+      background-color: rgba(100,100,100,60%);
+      height: 60vh;
+      aspect-ratio: 1 / 1.5;
+      border-radius: 15px;
+    }
+    .score p{
+      font-family: sans-serif;
+      font-weight: 500;
+      text-indent: .5rem;
+    }
     .row {
       display: grid;
       gap: 20px;
       grid-template-columns: repeat(4, 100px);
       grid-template-rows: repeat(4, 100px);
-      background-color: gray;
+      background-color: rgba(100,100,100,60%);
       border-radius: 15px;
       padding: 15px;
     }
@@ -281,5 +270,37 @@ const complexGradientAnimation = function() {
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       position: absolute;
+    }
+    .card .back:hover{
+      transform: translate3d(-5px, -5px, -5px);
+      box-shadow: rgba(0,0,0,40%) 5px 5px;
+    }
+    .restartDiv {
+      background-color: #AC9072;
+      position: absolute;
+      bottom: 50px;
+      width: 200px;
+      height: 70px;
+
+      border: solid #8E6C49 4px;
+      border-radius: 15px;
+      /* border-width: 10px;
+      border-color: #8E6C49; */
+      box-shadow: #764C24 5px 5px;
+    }
+    .restartDiv button {
+      border-radius: 15px;
+      width: 100%;
+      height: 100%;
+
+      background-color: rgba(0,0,0,0);
+      border: none;
+
+      font-size: large;
+      font-weight: 700;
+    }
+    .restartDiv:active {
+      transform: translate3d(5px, 5px, 5px);
+      box-shadow: none;
     }
   </style>
