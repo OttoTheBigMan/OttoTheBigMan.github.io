@@ -112,15 +112,88 @@
 let score = 0;
 let tries = 0;
 let highScore = localStorage.getItem("highScore")
+let bestTries = localStorage.getItem("bestTries")
+let avgScoreArr = []
+let avgTriesArr = []
+let avgScore = 0;
+let avgTries = 0;
+
+loadAverage()
+
+
+console.log()
+
 if(highScore == undefined){
   highScore = 0;
 }
+if(bestTries == undefined){
+  bestTries = 69420;
+}
+
+function loadAverage(){
+  avgScoreArr = []
+  avgTriesArr = []
+  for (let i = 0; i < 5; i++) {
+    let item = localStorage.getItem(i + "scoreArr")
+    if(item != undefined){
+      avgScoreArr.push(item)
+    }
+    
+  }
+  for (let i = 0; i < 5; i++) {
+    let item = localStorage.getItem(i + "triesArr")
+    if(item != undefined){
+      avgTriesArr.push(item)
+    }
+    
+  }
+  let sum = 0;
+  //Set the average tries
+  
+    
+  // for (let i = 0; i < avgScoreArr.length; i++) {
+  //   const element = avgScoreArr[i];
+  //   sum += element;
+  // }
+  avgScore = avgScoreArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / avgScoreArr.length
+  sum = 0;
+  
+  for (let i = 0; i < avgTriesArr.length; i++) {
+    const element = avgTriesArr[i];
+    sum += element;
+  }
+  avgTries = sum / avgTriesArr.length
+  // console.log(avgTriesArr, avgScoreArr)
+}
 
 function finishGame(){
-  console.log("FInsh da gam")
+  // console.log("FInsh da gam")
   if(score > highScore){
     localStorage.setItem("highScore", score)
     highScore = score;
+  }
+  if(tries < bestTries){
+    localStorage.setItem("bestTries", tries)
+    bestTries = tries;
+  }
+  //Save average
+  avgScoreArr.push(score)
+  avgTriesArr.push(tries)
+  if(avgTriesArr.length > 5){
+    avgTriesArr.shift()
+  }
+  if(avgScoreArr.length > 5){
+    avgScoreArr.shift()
+  }
+
+  //ACTUALLY save it hehehehaw
+  for (let i = 0; i < avgScoreArr.length; i++) {
+    const element = avgScoreArr[i];
+    localStorage.setItem(i + "scoreArr", element)
+  }
+  for (let i = 0; i < avgTriesArr.length; i++) {
+    const element = avgTriesArr[i];
+    localStorage.setItem(i + "triesArr", element)
   }
 }
 function pickCards(card1, card2){
@@ -172,9 +245,21 @@ function pickCards(card1, card2){
       {/each}
     </div >
     <div class="score">
+      <h2>This round:</h2>
       <p>Tries: {tries}</p>
-      <p>Current score: {score}</p>
-      <p>High score: {highScore}</p>
+      <p>Score: {score}</p>
+      <h2>Best:</h2>
+      <p>Tries: {bestTries}</p>
+      <p>Score: {highScore}</p>
+      <h2>Last 5 rounds (average):</h2>
+      {#if avgScoreArr.length >= 5 && avgTriesArr.length >= 5}
+        <p>Tries: {avgTries}</p>
+        <p>Score: {avgScore}</p>
+      {/if}
+      <!-- Basically else: -->
+      {#if avgScoreArr.length < 5 || avgTriesArr.length < 5}
+      <h1>N/A</h1>
+      {/if}
     </div>
     <div class="restartDiv">
       <button onClick="window.location.reload();">
@@ -230,6 +315,11 @@ function pickCards(card1, card2){
       font-family: sans-serif;
       font-weight: 500;
       text-indent: .5rem;
+    }
+    .score h2{
+      text-align: center;
+      font-family: sans-serif;
+      font-weight: 600;
     }
     .row {
       display: grid;
