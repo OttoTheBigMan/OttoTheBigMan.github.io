@@ -151,16 +151,16 @@ function loadAverage(){
   //Set the average tries
   
     
-  // for (let i = 0; i < avgScoreArr.length; i++) {
-  //   const element = avgScoreArr[i];
-  //   sum += element;
-  // }
-  avgScore = avgScoreArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / avgScoreArr.length
+  for (let i = 0; i < avgScoreArr.length; i++) {
+    const element = avgScoreArr[i];
+    sum += parseInt(element);
+  }
+  avgScore = sum / avgScoreArr.length
   sum = 0;
   
   for (let i = 0; i < avgTriesArr.length; i++) {
     const element = avgTriesArr[i];
-    sum += element;
+    sum += parseInt(element);
   }
   avgTries = sum / avgTriesArr.length
   // console.log(avgTriesArr, avgScoreArr)
