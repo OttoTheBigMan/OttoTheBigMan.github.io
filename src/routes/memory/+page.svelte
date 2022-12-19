@@ -169,32 +169,33 @@ function loadAverage(){
 function finishGame(){
   // console.log("FInsh da gam")
   if(score > highScore){
-    localStorage.setItem("highScore", score)
+    localStorage.setItem("highScore", score);
     highScore = score;
   }
   if(tries < bestTries){
-    localStorage.setItem("bestTries", tries)
+    localStorage.setItem("bestTries", tries);
     bestTries = tries;
   }
   //Save average
-  avgScoreArr.push(score)
-  avgTriesArr.push(tries)
+  avgScoreArr.push(score);
+  avgTriesArr.push(tries);
   if(avgTriesArr.length > 5){
-    avgTriesArr.shift()
+    avgTriesArr.shift();
   }
   if(avgScoreArr.length > 5){
-    avgScoreArr.shift()
+    avgScoreArr.shift();
   }
 
   //ACTUALLY save it hehehehaw
   for (let i = 0; i < avgScoreArr.length; i++) {
     const element = avgScoreArr[i];
-    localStorage.setItem(i + "scoreArr", element)
+    localStorage.setItem(i + "scoreArr", element);
   }
   for (let i = 0; i < avgTriesArr.length; i++) {
     const element = avgTriesArr[i];
-    localStorage.setItem(i + "triesArr", element)
+    localStorage.setItem(i + "triesArr", element);
   }
+  loadAverage();
 }
 function pickCards(card1, card2){
   // console.log(card1.listIndex, card2.listIndex)
@@ -271,6 +272,7 @@ function pickCards(card1, card2){
   <style>
 
 
+
     h1{
       text-align: center;
     }
@@ -280,17 +282,7 @@ function pickCards(card1, card2){
       overflow: hidden;
     }
     body{
-      /* margin: 0; */
-      
-      /* animation-name: gradient;
-      animation-duration: 15s;
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;    */
-      
-      /* animation-play-state:running; */
-      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-      /* transition: all 0.1s ease-out; */
-
+      background-image: linear-gradient(135deg, red, cyan);
       height: 100vh;
       width: 100vw;
     }
