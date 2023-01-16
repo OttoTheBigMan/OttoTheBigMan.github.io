@@ -68,9 +68,9 @@
     <div class="todoList">
         {#each todoListArr as obj, i}
         <div class="todoCard">
-            <input type="checkbox" bind:checked={obj.value}>
+            <input id="val" type="checkbox" bind:checked={obj.value}>
             <p>{obj.text}</p>
-            <button on:click={DeleteCard(obj)}>Delete</button>
+            <button on:click={DeleteCard(obj)}><img alt="hehehehaw" src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png"></button>
         </div>
         {/each}
     </div>
@@ -115,10 +115,11 @@
         
     }
     .inputDiv div button {
-        background-color: #551092;
+        background-color: #bbb;
         box-shadow: 3px 3px black;
         margin: 3px;
         border-radius: 5px;
+        font-weight: 600;
     }
     .inputDiv div button:active {
         box-shadow: none;
@@ -146,23 +147,50 @@
         text-align: left;
     }
     .todoCard button {
+        border-radius: 10px;
         align-self: center;
-        height: 20px;
-        
+        height: 60px;
+        width: 60px;
+        margin-right: 7px;
+        display: flex;
+        justify-content: center;
+        border: 2px solid #000;
+        align-items: center;
+    }
+    .todoCard button:active{
+        background-color: #bbb;
+    }
+    .todoCard button img {
+        width: 50px;
+        height: 50px;
     }
     .todoCard input {
         width: 60px;
         height: 60px;
         margin-top: 7px;
         margin-left: 7px;
-        border-radius: 20px;
+        border-radius: 10px;
+        appearance: none;
+        border: 2px solid #000;
+        background-color: white;
+        display: flex;
+    }
+    .todoCard input:checked {
+        background: url(https://static.thenounproject.com/png/6156-200.png), skyblue;
+        background-size: cover;
     }
     .todoCard p {
         font-family: Tahoma;
         text-align: center;
         align-self: center;
-        flex-wrap: wrap;
-        max-width: 50%;
+        max-width: 60%;
+        word-wrap: break-all;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        max-height: 80%;
+    }
+    .todoCard p::-webkit-scrollbar {
+        display: none;
     }
     .todoBody {
         background-image: url(https://images.saymedia-content.com/.image/t_share/MTc4NzM1OTc4MzE0MzQzOTM1/how-to-create-cool-website-backgrounds-the-ultimate-guide.png);
