@@ -68,8 +68,8 @@
     <div class="todoList">
         {#each todoListArr as obj, i}
         <div class="todoCard">
-            <input class="checkBoxClass todoContent" type="checkbox" bind:checked={obj.value}>
-            <p class="todoContent">{obj.text}</p>
+            <input type="checkbox" bind:checked={obj.value}>
+            <p>{obj.text}</p>
             <button on:click={DeleteCard(obj)}>Delete</button>
         </div>
         {/each}
@@ -101,7 +101,7 @@
     }
     .inputDiv input {
         border-radius: 5px;
-        
+        margin: 0 50px;
         border: solid black 1px;
     }
     .inputDiv div {
@@ -114,6 +114,16 @@
         /* background-color: black; */
         
     }
+    .inputDiv div button {
+        background-color: #551092;
+        box-shadow: 3px 3px black;
+        margin: 3px;
+        border-radius: 5px;
+    }
+    .inputDiv div button:active {
+        box-shadow: none;
+        transform: translate(3px, 3px);
+    }
     .todoList {
         padding: 10px;
         width: 500px;
@@ -121,13 +131,38 @@
         margin: 10px auto;
         border-radius: 20px;
     }
+    .todoList:empty {
+        background-color: transparent;
+    }
     .todoCard {
-        width: 300px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 75%;
         height: 75px;
-        background-color: darkgray;
+        background-color: rgba(129, 182, 230, 30%);
         margin: 10px auto;
         border-radius: 10px;
         text-align: left;
+    }
+    .todoCard button {
+        align-self: center;
+        height: 20px;
+        
+    }
+    .todoCard input {
+        width: 60px;
+        height: 60px;
+        margin-top: 7px;
+        margin-left: 7px;
+        border-radius: 20px;
+    }
+    .todoCard p {
+        font-family: Tahoma;
+        text-align: center;
+        align-self: center;
+        flex-wrap: wrap;
+        max-width: 50%;
     }
     .todoBody {
         background-image: url(https://images.saymedia-content.com/.image/t_share/MTc4NzM1OTc4MzE0MzQzOTM1/how-to-create-cool-website-backgrounds-the-ultimate-guide.png);
@@ -136,18 +171,5 @@
         background-position: center;
         text-align: center;
         font-family: sans-serif;
-    }
-    .todoContent {
-        display: inline-block;
-        vertical-align: middle;
-    }
-    .checkBoxClass {
-        width: 60px;
-        height: 60px;
-        margin-top: 7px;
-        margin-left: 7px;
-    }
-    button {
-        border-radius: 5px;
     }
 </style>
