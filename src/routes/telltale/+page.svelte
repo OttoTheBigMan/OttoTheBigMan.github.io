@@ -237,19 +237,11 @@
 
     main {
         margin: 0;
-    }
-
-    :global(body){
         background-color: #196D94;
         font-family: sans-serif;
         height: 100vh;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
+        position: absolute;
     }
-    /* .AllSnowFlakes {
-
-    } */
     .SnowFlake {
         color: white;
     }

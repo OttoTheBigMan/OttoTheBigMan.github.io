@@ -199,5 +199,7 @@
         background-position: center;
         text-align: center;
         font-family: sans-serif;
+        height: 100vh;
+        width: 100vw;
     }
 </style>
