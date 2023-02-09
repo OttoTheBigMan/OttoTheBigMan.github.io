@@ -80,12 +80,6 @@
 </body>
 
 <style>
-    :global(body){
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        overflow: hidden;
-    }
     .inputDiv {
         background: rgba(73, 47, 75, 70%);
         width: 500px;
@@ -201,5 +195,10 @@
         font-family: sans-serif;
         height: 100vh;
         width: 100vw;
+
+        overflow-y: scroll;
+    }
+    ::-webkit-scrollbar {
+        display: none;
     }
 </style>
