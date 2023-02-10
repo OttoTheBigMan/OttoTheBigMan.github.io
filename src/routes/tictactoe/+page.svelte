@@ -1,5 +1,6 @@
 <script>
     import {fade} from "svelte/transition"
+    import "@fontsource/ubuntu"
     let element;
     let canPress = true;
     let gameOver = false;
@@ -170,12 +171,8 @@
 {/if}
 </body>
 <style>
-    :global(body){
-        margin: 0;
-        padding: 0;
-    }
     p {
-        font-family: roboto;
+        font-family: ubuntu;
 
     }
     .screen {

@@ -14,7 +14,7 @@
     {#each linkList as link}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="barLink" onclick="location.href='{link.url}'">
-            <p>{link.text}</p>
+            {link.text}
         </div>
         
     {/each}
@@ -39,7 +39,7 @@
         border-radius: 10px;
         border: 2px solid black;
         box-shadow: 2px 2px black;
-        background-color: darkcyan;
+        background-color: #45a5b0;
 
         position: absolute;
         display: flex;
@@ -74,12 +74,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-    .barLink p {
-        color: black;
-        height: fit-content;
-        width: fit-content;
         user-select: none;
+        color: black;
     }
     .barLink:hover {
         background-color: rgba(0,0,0,25%);

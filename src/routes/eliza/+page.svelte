@@ -28,7 +28,7 @@
 </script>
 
 <div class="container">
-  <h1>TODO: Complete assignment</h1>
+  <h1>Chat with Eliza</h1>
   <div class="scrollable">
     {#each chat as thing}
     <!-- TODO: loop over the messages and display them -->
