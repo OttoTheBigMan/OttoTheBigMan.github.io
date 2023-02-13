@@ -76,6 +76,8 @@
         align-items: center;
         user-select: none;
         color: black;
+
+        overflow: hidden;
     }
     .barLink:hover {
         background-color: rgba(0,0,0,25%);

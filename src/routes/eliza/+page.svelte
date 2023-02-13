@@ -4,6 +4,7 @@
   import "@picocss/pico";
   import "elizabot";
   import ElizaBot from "elizabot";
+  import ubuntu from "@fontsource/ubuntu"
   beforeNavigate(() => {
     invalidate(); // force csr to "unload" the imported css on this page
     // try commenting this out and navigate using href links and see how the
@@ -26,7 +27,7 @@
     chat = chat;
   }
 </script>
-
+<main>
 <div class="container">
   <h1>Chat with Eliza</h1>
   <div class="scrollable">
@@ -54,3 +55,19 @@
     <input type="text" name="text" />
   </form>
 </div>
+</main>
+<style>
+  :global(body){
+    overflow-y: auto;
+  }
+  .scrollable {
+    font-family: ubuntu;
+
+  }
+  h1 {
+    text-align: center;
+    margin-top: 10px;
+    font-family: ubuntu;
+
+  }
+</style>
