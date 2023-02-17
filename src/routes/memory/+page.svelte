@@ -1,4 +1,5 @@
 <script>
+    import ubuntu from "@fontsource/ubuntu"
     let cards = [];
     let imgs = [
       "https://www.xfire.com/wp-content/uploads/2022/08/cropped-walter-white-might-be-headed-to-multiversus-8.jpg",
@@ -274,6 +275,7 @@ function pickCards(card1, card2){
 
 
     h1{
+      font-family: ubuntu;
       text-align: center;
     }
     :global(body){
@@ -282,9 +284,10 @@ function pickCards(card1, card2){
       overflow: hidden;
     }
     body{
-      background-image: linear-gradient(135deg, red, cyan);
+      background-color: rgb(23, 23, 23);
       height: 100vh;
       width: 100vw;
+      color: white;
     }
     main {
       display: flex;
@@ -298,7 +301,7 @@ function pickCards(card1, card2){
     .score{
       position:absolute;
       right: 30px;
-      background-color: rgba(100,100,100,60%);
+      background-color: rgba(55, 55, 55, 0.6);
       height: 60vh;
       aspect-ratio: 1 / 1.5;
       border-radius: 15px;
@@ -318,7 +321,8 @@ function pickCards(card1, card2){
       gap: 20px;
       grid-template-columns: repeat(4, 100px);
       grid-template-rows: repeat(4, 100px);
-      background-color: rgba(100,100,100,60%);
+      background-color: rgba(55, 55, 55, 0.6);
+      
       border-radius: 15px;
       padding: 15px;
     }
