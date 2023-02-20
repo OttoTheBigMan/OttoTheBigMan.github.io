@@ -1,2 +1,2 @@
-export const prerender = true; //+layout.js
+export const prerender = 'auto'
 export const ssr = false; //+layout.js
