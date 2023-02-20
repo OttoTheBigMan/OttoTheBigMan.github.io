@@ -8,7 +8,7 @@
         {path: "/eliza", text: "Eliza"},
         {path: "/todo", text: "Todo"},
         {path: "/tictactoe", text: "Tic tac toe"},
-        {path: "/", text: "Home"}
+        {path: "/blog", text: "Blog"}
     ]
 
     let skull1;

@@ -1,7 +1,7 @@
 <script>
     import "@fontsource/ubuntu"
     
-    const links = [{url: "/", text: "Home"}, {url: "/telltale", text: "Telltale"}, {url: "/memory", text: "Memory"}, {url: "/eliza", text: "Eliza"}, {url: "/todo", text: "Todo list"}, {url: "/tictactoe", text: "Tic Tac Toe"}]
+    const links = [{url: "/", text: "Home"}, {url: "/blog", text: "Blog"},{url: "/telltale", text: "Telltale"}, {url: "/memory", text: "Memory"}, {url: "/eliza", text: "Eliza"}, {url: "/todo", text: "Todo list"}, {url: "/tictactoe", text: "Tic Tac Toe"}]
     let linkList = []
     let barOpen = false;
     function ToggleBar(){
@@ -68,7 +68,7 @@
         font-family: ubuntu;
         font-size: 20px;
         height: 90%;
-        width: 10%;
+        width: 7.5%;
         border-radius: 10px;
 
         display: flex;
