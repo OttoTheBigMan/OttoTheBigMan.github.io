@@ -1,17 +1,17 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import { mdsvex } from 'mdsvex'
 
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: adapter({assets:'docs',pages:'docs'})
+		adapter: adapter({assets:'docs',pages:'docs', strict: false})
 	},
 	extensions: ['.svelte', '.md', '.svx'],
 
 	preprocess: [
 		mdsvex({
-		extensions: ['.md']
+			extensions: ['.md']
 		})
 	]
 };
