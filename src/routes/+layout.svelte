@@ -19,7 +19,7 @@
         
     {/each}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <img id="toggleButton" alt="close" src="{barOpen ? "/close.png" : "/leftarrow.png"}" on:click={ToggleBar}>
+    <img id="toggleButton" class:toggleRotate={barOpen} alt="close" src="{barOpen ? "/close.png" : "/leftarrow.png"}" on:click={ToggleBar}>
 </div>
 
 <main>
@@ -39,7 +39,7 @@
         border-radius: 10px;
         border: 2px solid black;
         box-shadow: 2px 2px black;
-        background-color: #45a5b0;
+        background-color: #E08B41;
 
         position: absolute;
         display: flex;
@@ -63,6 +63,11 @@
         height: 40px;
         position: absolute;
         right: 5px;
+
+        transition: 0.5s;
+    }
+    .toggleRotate {
+        transform: rotate(360deg);
     }
     .barLink {
         font-family: ubuntu;
