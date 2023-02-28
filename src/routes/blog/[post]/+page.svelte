@@ -7,7 +7,7 @@
     <article class="post">
         <svelte:component this={data.markdown} />
     </article>
-    <a href="/blog" class="btn">Return</a>
+    <a href="/" class="btn">Return</a>
 </main>
 
 <style>
