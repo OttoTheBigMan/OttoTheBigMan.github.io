@@ -9,7 +9,7 @@
 
 #### This is so sad :(
 
-I also know regular text :)
+I also know *regular* text :)
 
 ```js
 //I may or may not also know how to write code
@@ -33,4 +33,11 @@ function Ronaldo(){
         height: 35px;
         font-size: 25px;
     }
+    /* pre, code {
+        border-radius: 5px;
+        background-color: hsl(220,13%,18%);
+        padding: 5px;
+        box-sizing: border-box;
+        color: gray;
+    } */
 </style>

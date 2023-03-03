@@ -8,13 +8,26 @@
         {path: "/eliza", text: "Eliza"},
         {path: "/todo", text: "Todo"},
         {path: "/tictactoe", text: "Tic tac toe"},
-        {path: "/", text: "Home"}
+        {path: "/search", text: "Search"}
     ]
 
     let skull1;
     let skull2;
 
     let rotation = 0;
+
+    const allFiles = import.meta.glob("$lib/posts/*.md")
+    const fileNames = [];
+    for (const path in allFiles){
+
+        const substring = path.substring(
+            path.lastIndexOf("/") + 1,
+            path.lastIndexOf(".")
+        )
+        console.log(substring)
+        fileNames.push(substring)
+    }
+
     function DoFrame(time){
         let sec = time / 1000;
 
@@ -37,18 +50,32 @@
 </script>
 
 <main>
-    <h1>Otto's Crazy Website</h1>
+    
 
     <div class="navigation">
+        <h1>More Websites</h1>
         {#each links as link}
-            <div class="link" onclick="location.href='{link.path}'">
+            <a class="btn" href="{link.path}">
                 {link.text}
-            </div>
+            </a>
         {/each}
     </div>
 
-    
+    <div class="anim"></div>
 
+    <div class="blog">
+        <h2>Blog posts</h2>
+        {#each fileNames as name}
+            <div class="post-div"> 
+
+                <h3>{name}</h3>
+                <a class="btn" href="/blog/{name}">Open</a>
+
+            </div>
+
+        {/each}
+    </div>
+    
     <div class="footer">
         <div>
             <h2>Games</h2>
@@ -58,9 +85,9 @@
         </div>
         <div>
             <h2>More games</h2>
-            <a href="https://realbigmonk.itch.io/iwftro">I Wanna File The Restraining Order</a>
-            <a href="https://realbigmonk.itch.io/iwbtb">I Wanna Be The Beetle</a>
-            <a href="https://realbigmonk.itch.io/i-wanna-run-the-triathlon">I Wanna Run The Triathlon</a>
+            <a href="https://realbigmonk.itch.io/iwftro" target="_blank" rel="noreferrer">I Wanna File The Restraining Order</a>
+            <a href="https://realbigmonk.itch.io/iwbtb" target="_blank" rel="noreferrer">I Wanna Be The Beetle</a>
+            <a href="https://realbigmonk.itch.io/i-wanna-run-the-triathlon" target="_blank" rel="noreferrer">I Wanna Run The Triathlon</a>
         </div>
         <div>
             <h2>Other</h2>
@@ -70,60 +97,123 @@
     </div>
 </main>
 <style>
+
+    .anim {
+        position: absolute;
+        left: -46px;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+        background: repeating-linear-gradient(
+            -55deg,
+            black 1px,
+            #1a1a1a 2px,
+            #1a1a1a 11px,
+            black 12px,
+            black 20px
+        );
+        animation-name: MOVE-BG;
+        animation-duration: .6s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+    @keyframes MOVE-BG {
+	from {
+		transform: translateX(0);
+	}
+	to { 
+		transform: translateX(46px);
+	}
+}
     main {
-        width: 100vw;
-        height: 100vh;
-        background-color: #000d36;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
         position: absolute;
         color: white;
         font-family: ubuntu;
-
-        display: flex;
-        /* justify-content: center; */
-        align-items: center;
-        flex-direction: column;
-
-    }
-    .navigation {
-        position: absolute;
-        top: 15%;
-        width: 25%;
-        height: 50%;
-        border-radius: 20px;
-        background-color: rgba(64,64,64,20%);
-        
+        text-align: center;
 
         display: grid;
-
-        justify-content: center;
-        align-content: center;
-
-        gap: 5%;
-        grid-template-columns: repeat(2, 45%);
-        grid-template-rows: repeat(3, 20%);
+        grid-template-columns: 25% 50% 25%;
+        grid-template-rows: auto 25%;
     }
-    .navigation div {
-        border-radius: 10px;
-
-        color: white;
-        font-size: larger;
-
+    .btn {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        width: 80px;
+        height: 40px;
+        color: black;
+        background-color: #F7773B;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-right: 5px;
+
         user-select: none;
     }
-    .navigation div:hover {
-        background-color: rgba(0,0,0,50%);
+    .btn:hover {
+        background-color: #ED5A39;
+        color: black;
+    }
+    .post-div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        background-color: #1a1a1a;
+        width: 80%;
+        height: 50px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+    .post-div h3 {
+        text-indent: 5px;
+    }
+    .navigation {
+        background-color: black;
+        box-shadow: 0 0 16px 16px black;
+        
+
+        display: flex;
+        flex-direction: column;
+
+        justify-content: space-evenly;
+        align-items: center;
+
+        box-sizing: border-box;
+        padding-bottom: 25px;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    .blog{
+        background-color: black;
+        box-shadow: 0 0 16px 16px black;
+        grid-column-start: 3;
+        grid-row: 1;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        overflow-y: auto;
+
+        padding-bottom: 50px;
     }
     .footer {
-        width: 100vw;
-        height: 20vh;
+        width: auto;
+        height: 25vh;
         background-color: black;
-        position: absolute;
-        bottom: 0;
 
         box-shadow: 0 0 16px 16px black;
+
+        grid-row-start: 2;
+        grid-column-start: 1;
+        grid-column-end: 4;
 
         display: flex;
         justify-content: space-evenly;
@@ -133,13 +223,11 @@
         flex-direction: column;
     }
     a{
-        color: #034ba3;
+        color: #EDB739;
         text-decoration: none;
     }
     a:hover{
-        color: #0a5fc7;
+        color: #E08B41;
         /* hello*/
     }
-
-    
 </style>
