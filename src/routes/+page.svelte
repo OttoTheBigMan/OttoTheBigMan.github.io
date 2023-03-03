@@ -85,9 +85,9 @@
         </div>
         <div>
             <h2>More games</h2>
-            <a href="https://realbigmonk.itch.io/iwftro">I Wanna File The Restraining Order</a>
-            <a href="https://realbigmonk.itch.io/iwbtb">I Wanna Be The Beetle</a>
-            <a href="https://realbigmonk.itch.io/i-wanna-run-the-triathlon">I Wanna Run The Triathlon</a>
+            <a href="https://realbigmonk.itch.io/iwftro" target="_blank" rel="noreferrer">I Wanna File The Restraining Order</a>
+            <a href="https://realbigmonk.itch.io/iwbtb" target="_blank" rel="noreferrer">I Wanna Be The Beetle</a>
+            <a href="https://realbigmonk.itch.io/i-wanna-run-the-triathlon" target="_blank" rel="noreferrer">I Wanna Run The Triathlon</a>
         </div>
         <div>
             <h2>Other</h2>
@@ -184,18 +184,25 @@
         justify-content: space-evenly;
         align-items: center;
 
+        box-sizing: border-box;
+        padding-bottom: 25px;
+    }
+    ::-webkit-scrollbar {
+        display: none;
     }
     .blog{
         background-color: black;
         box-shadow: 0 0 16px 16px black;
         grid-column-start: 3;
-        grid-row: 1 / span 2;
+        grid-row: 1;
 
         display: flex;
         flex-direction: column;
         align-items: center;
 
         overflow-y: auto;
+
+        padding-bottom: 50px;
     }
     .footer {
         width: auto;
@@ -206,7 +213,7 @@
 
         grid-row-start: 2;
         grid-column-start: 1;
-        grid-column-end: 3;
+        grid-column-end: 4;
 
         display: flex;
         justify-content: space-evenly;
