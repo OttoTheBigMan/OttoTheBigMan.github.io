@@ -47,9 +47,7 @@
         {/each}
     </div>
 
-    <div class="cradle">
-
-    </div>
+    
 
     <div class="footer">
         <div>
@@ -143,6 +141,5 @@
         /* hello*/
     }
 
-    /* Newtons crazy cradle (kanske) */
-
+    
 </style>

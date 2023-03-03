@@ -39,7 +39,7 @@
         border-radius: 10px;
         border: 2px solid black;
         box-shadow: 2px 2px black;
-        background-color: #45a5b0;
+        background-color: rgb(87, 87, 87);
 
         position: absolute;
         display: flex;
@@ -80,6 +80,6 @@
         overflow: hidden;
     }
     .barLink:hover {
-        background-color: rgba(0,0,0,25%);
+        background-color: rgba(256,256,256,25%);
     }
 </style>
