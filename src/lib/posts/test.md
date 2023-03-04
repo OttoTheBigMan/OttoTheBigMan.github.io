@@ -17,7 +17,8 @@ function Ronaldo(){
     console.log("SUUIIIII")
 }
 ```
-### Ok maybe not :0
+### Kinda *Cray cray*
+Almost as cray cray as **this**
 
 <script>
     let count = 0
