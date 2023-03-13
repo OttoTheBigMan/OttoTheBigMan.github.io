@@ -68,7 +68,7 @@
     }
 
     .anim {
-        position: absolute;
+        position: fixed;
         left: -46px;
         right: 0;
         top: 0;
