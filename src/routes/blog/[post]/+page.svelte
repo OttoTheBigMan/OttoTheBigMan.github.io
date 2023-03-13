@@ -57,6 +57,6 @@
         background-color: #ED5A39;
     }
     :global(body){
-        overflow-y: scroll;
+        overflow-y: scroll; 
     }
 </style>
