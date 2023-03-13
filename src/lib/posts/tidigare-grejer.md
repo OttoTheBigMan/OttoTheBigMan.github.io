@@ -2,11 +2,9 @@
 
 I denna kurs har jag gjort en crazy clicker, todo-lista, chatbot, tictactoe, memory, blog, api-search, telltale-hemsida och en galen homepage.
 
+Här är lite kod:
 ```js
-//Hello there
-function GiveOttoA(){
-    let OttosBetyg = "A";
-}
+
 ```
 
 <script>
