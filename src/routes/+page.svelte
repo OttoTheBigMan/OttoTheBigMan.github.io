@@ -108,8 +108,8 @@
         background: repeating-linear-gradient(
             -55deg,
             black 1px,
-            #1a1a1a 2px,
-            #1a1a1a 11px,
+            #111111 2px,
+            #111111 11px,
             black 12px,
             black 20px
         );

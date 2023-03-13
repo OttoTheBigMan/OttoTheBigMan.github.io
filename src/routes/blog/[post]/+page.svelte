@@ -8,12 +8,13 @@
         <svelte:component this={data.markdown} />
     </article>
     <a href="/" class="btn">Return</a>
+    <div class="anim"></div>
 </main>
 
 <style>
     .post {
         margin: 5vh 0;
-        background-color: rgb(56, 56, 56);
+        background-color: #313335;
         width: 40%;
         min-height: 75vh;
         max-height: fit-content;
@@ -24,7 +25,9 @@
         padding: 25px;
         box-sizing: border-box;
 
-        box-shadow: 6px 6px rgb(40, 40, 40);
+        box-shadow: 6px 6px #1D1F21;
+
+        z-index: 2;
     }
     
     main {
@@ -38,6 +41,8 @@
         align-items: center;
         flex-direction: column;
         background-color: rgb(29, 29, 29);
+
+        z-index: 0;
     }
     .btn {
         text-decoration: none;
@@ -52,11 +57,42 @@
         color: black;
         margin-bottom: 25px;
         border-radius: 10px;
+
+        z-index: 2;
     }
     .btn:hover {
         background-color: #ED5A39;
     }
     :global(body){
         overflow-y: scroll; 
+    }
+
+    .anim {
+        position: absolute;
+        left: -46px;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        background: repeating-linear-gradient(
+            55deg,
+            black 1px,
+            #111111 2px,
+            #111111 11px,
+            black 12px,
+            black 20px
+        );
+        animation-name: MOVE-BG;
+        animation-duration: .6s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+    @keyframes MOVE-BG {
+        from {
+            transform: translateX(46px);
+        }
+        to { 
+            transform: translateX(0);
+        }
     }
 </style>
