@@ -1,6 +1,7 @@
 <script>
     import {onMount} from "svelte";
     import "@fontsource/ubuntu"
+    import Ottohub from "$lib/components/Ottohub.svelte"
 
     const links = [
         {path: "/telltale", text: "Telltale"},
@@ -62,6 +63,7 @@
     </div>
 
     <div class="anim"></div>
+    <Ottohub></Ottohub>
 
     <div class="blog">
         <h2>Blog posts</h2>
@@ -147,7 +149,7 @@
         width: 80px;
         height: 40px;
         color: black;
-        background-color: #F7773B;
+        background-color: #FFA31A;
         text-decoration: none;
         border-radius: 5px;
         margin-right: 5px;

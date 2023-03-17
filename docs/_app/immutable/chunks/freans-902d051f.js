@@ -1,1 +1,0 @@
-import{S as l,i,s as c,k as h,q as m,l as d,m as u,r as p,h as r,b as _,F as f,B as n}from"./index-882ee3ba.js";function x(o){let a,s;return{c(){a=h("h1"),s=m("You are gay")},l(e){a=d(e,"H1",{});var t=u(a);s=p(t,"You are gay"),t.forEach(r)},m(e,t){_(e,a,t),f(a,s)},p:n,i:n,o:n,d(e){e&&r(a)}}}class g extends l{constructor(a){super(),i(this,a,null,x,c,{})}}export{g as default};
