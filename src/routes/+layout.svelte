@@ -19,7 +19,7 @@
         
     {/each}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <img id="toggleButton" class:toggleRotate={barOpen} alt="close" src="{barOpen ? "/close.png" : "/leftarrow.png"}" on:click={ToggleBar}>
+    <img id="toggleButton" class:toggleRotate={barOpen} alt="close" src="{barOpen ? "/icons/close.png" : "/icons/leftarrow.png"}" on:click={ToggleBar}>
 </div>
 
 <main>

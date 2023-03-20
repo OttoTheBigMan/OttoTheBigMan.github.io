@@ -1,6 +1,8 @@
 <script>
+    let mouse = {x: 0, y: 0}
     let lists = [
         {
+            isMoving: false,
             title: "Todo",
             cards: [
                 {
@@ -12,8 +14,40 @@
                     value: "HEHEHEHAW"
                 }
             ],
+            element: undefined
+        },
+        {
+            isMoving: false,
+            title: "Done",
+            cards: [
+                {
+                    type: "text",
+                    value: "Absolutely nothing"
+                },
+                {
+                    type: "link",
+                    path: "/",
+                    value: "HEHEHEHAW"
+                }
+            ],
+            element: undefined
         }
     ]
+    function UpdateMousePosition(event){
+        mouse = {x: event.clientX, y: event.clientY};
+    }
+    function Move(array, i){
+        array[i].isMoving = !array[i].isMoving;
+        console.log(array[i].isMoving)
+        // let frames = setInterval(() => {
+        //     if(!array[i].isMoving){
+        //         clearInterval(frames);
+        //     }
+        //     // array[i].element.style.left = mouse.x;
+        //     // array[i].element.style.top = mouse.y;
+
+        // }, 1000 / 60)
+    }
 </script>
 
 <main class="bg">
@@ -26,12 +60,17 @@
     <div class="section new"></div>
     <!-- Section with all the lists: -->
     <div class="section main">
-        {#each lists as list}
-            <div class="list">
+        {#each lists as list, i}
+            <div class="listParent {list.isMoving ? "moving" : ""}">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <img src="/icons/moveicon.png" alt="move" on:click={() => {Move(lists, i)}} on:keypress={() => {Move(lists, i)}}>
+                <img id="deleteButton" src="/icons/delete.png" alt="delete">
                 <h1>{list.title}</h1>
-                <div>
+                <div class="list">
                     {#each list.cards as card}
-                        <p>{card.value}</p>
+                        <div class="element">
+
+                        </div>
                     {/each}
                 </div>
             </div>
@@ -94,7 +133,12 @@
         box-sizing: border-box;
         padding: 35px;
     }
-    .list {
+    .moving {
+        background-color: var(--bg-accent);
+    }
+    .listParent {
+        position: relative;
+
         height: 100%;
         background-color: var(--bg-accent);
         width: 30%;
@@ -106,11 +150,22 @@
         box-sizing: border-box;
         padding: 15px;
     }
-    .list div {
+    
+    .listParent img {
+        left: 15px;
+        position: absolute;
+        aspect-ratio: 1;
+        width: 15%;
+    }
+    #deleteButton {
+        right: 15px;
+        left: auto;
+    }
+    .list {
         border: 2px solid var(--accent-col);
         border-radius: 10px;
         width: 100%;
-        height: fit-content;
+        height: 100%;
 
         display: flex;
         flex-direction: column;
