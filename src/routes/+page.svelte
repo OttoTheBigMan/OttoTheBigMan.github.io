@@ -9,7 +9,8 @@
         {path: "/eliza", text: "Eliza"},
         {path: "/todo", text: "Todo"},
         {path: "/tictactoe", text: "Tic tac toe"},
-        {path: "/search", text: "Search"}
+        {path: "/search", text: "Search"},
+        {path: "/not-trello", text: "Not Trello"}
     ]
 
     let skull1;
