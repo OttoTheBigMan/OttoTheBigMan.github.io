@@ -19,6 +19,21 @@
         },
         {
             isMoving: false,
+            title: "Hola",
+            cards: [
+                {
+                    type: "text",
+                    value: "Hello there"
+                },
+                {
+                    type: "text",
+                    value: "you are the big gay"
+                }
+            ],
+            element: undefined
+        },
+        {
+            isMoving: false,
             title: "Done",
             cards: [
                 {
@@ -38,19 +53,62 @@
             element: undefined
         }
     ]
+    function MoveInArray(arr, fromIndex, toIndex) {
+        var element = arr[fromIndex];
+        arr.splice(fromIndex, 1);
+        arr.splice(toIndex, 0, element);
+    }
+    function GetLeftValue(element){
+        return element.getBoundingClientRect().left;
+    }
+    function GetClosestIndexInArray(val, arr){
+        let curr = arr[0];
+        arr.forEach(num => {
+            if(Math.abs(val - num) < Math.abs (val - curr)){
+                curr = num;
+            }
+        });
+        return arr.indexOf(curr);
+    }
     function UpdateMousePosition(event){
         mouse = {x: event.clientX, y: event.clientY};
         if(currentList != -1){
-            console.log(mouse)
             lists[currentList].element.style.left = mouse.x + "px";
             lists[currentList].element.style.top = mouse.y + "px";
+            closestList = GetClosestIndexInArray(mouse.x, listPositions)
+            console.log(closestList)
         }
     }
+    let listPositions = []
+    let closestList = -1;
+    let oldListPosition = -1;
     function Move(i){
+        if(currentList != -1 && !lists[i].isMoving){
+            return;
+        }
+        //When you click it while not moving
+        if(!lists[i].isMoving){
+            currentList = i;
+            listPositions = []
+            oldListPosition = i;
+            for(let j = 0; j < lists.length; j++){
+                listPositions.push(GetLeftValue(lists[j].element))
+            }
+            listPositions.sort((a, b) => a - b)
+        }
+        //When you click it in place
+        else{
+            MoveInArray(lists, oldListPosition, closestList)
+            i = closestList;
+            currentList = -1;
+            closestList = -1;
+
+        }
         lists[i].isMoving = !lists[i].isMoving;
-        currentList = lists[i].isMoving ? i : -1;
         lists = lists;
-        
+    }
+    function DeleteList(i){
+        //Currently does not delete list, but will later :)
     }
 </script>
 
@@ -70,7 +128,7 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="icon" src="/icons/moveicon.png" alt="move" on:click={() => {Move(i)}} on:keypress={() => {Move(i)}}>
                     <h1>{list.title}</h1>
-                    <img class="icon" id="deleteButton" src="/icons/delete.png" alt="delete">
+                    <img class="icon" id="deleteButton" src="/icons/delete.png" alt="delete" on:click={() => {DeleteList(i)}} on:keypress={() => {DeleteList(i)}}>
                 </div>
                 
                 <div class="list">

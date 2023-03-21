@@ -1,0 +1,8 @@
+.post.svelte-wm82sj{margin:5vh 0;background-color:#313335;width:40%;min-height:75vh;max-height:-moz-fit-content;max-height:fit-content;border-radius:25px;color:white;display:flex;flex-direction:column;padding:25px;box-sizing:border-box;box-shadow:6px 6px #1D1F21;z-index:2}main.svelte-wm82sj{font-family:ubuntu;width:100vw;min-height:100vh;max-height:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;background-color:rgb(29, 29, 29);z-index:0}.btn.svelte-wm82sj{text-decoration:none;background-color:#F7773B;display:flex;justify-content:center;align-items:center;width:80px;height:40px;color:black;margin-bottom:25px;border-radius:10px;z-index:2}.btn.svelte-wm82sj:hover{background-color:#ED5A39}body{overflow-y:scroll}.anim.svelte-wm82sj{position:fixed;left:-46px;right:0;top:0;bottom:0;z-index:1;background:repeating-linear-gradient(
+            55deg,
+            black 1px,
+            #111111 2px,
+            #111111 11px,
+            black 12px,
+            black 20px
+        );animation-name:svelte-wm82sj-MOVE-BG;animation-duration:.6s;animation-timing-function:linear;animation-iteration-count:infinite}@keyframes svelte-wm82sj-MOVE-BG{from{transform:translateX(46px)}to{transform:translateX(0)}}
