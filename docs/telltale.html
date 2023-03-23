@@ -5,32 +5,24 @@
 		<link rel="icon" href="./favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content="">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.370e2f8c.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.f74c24be.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.a47f4d93.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/control.e7f5239e.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/parse.d12b0d5b.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.01e15864.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/preload-helper.41c905a7.js">
+		<link rel="modulepreload" href="./_app/immutable/start-82d48230.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index-882ee3ba.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons-20a498d0.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/preload-helper-41c905a7.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/control-f5b05b5f.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/parse-d12b0d5b.js">
 	</head>
 	<body>
 		<div>
-			<script>
-				{
-					__sveltekit_1t20t17 = {
-						env: {},
-						base: new URL(".", location).pathname.slice(0, -1),
-						element: document.currentScript.parentElement
-					};
+		<script type="module" data-sveltekit-hydrate="45h">
+			import { start } from "./_app/immutable/start-82d48230.js";
 
-					Promise.all([
-						import("./_app/immutable/entry/start.370e2f8c.js"),
-						import("./_app/immutable/entry/app.01e15864.js")
-					]).then(([kit, app]) => {
-						kit.start(app, __sveltekit_1t20t17.element);
-					});
-				}
-			</script>
-		</div>
+			start({
+				env: {},
+				paths: {"base":"","assets":""},
+				target: document.querySelector('[data-sveltekit-hydrate="45h"]').parentNode,
+				version: "1679574920527"
+			});
+		</script></div>
 	</body>
 </html>

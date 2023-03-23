@@ -19,7 +19,7 @@
         },
         {
             isMoving: false,
-            title: "Hola",
+            title: "Known problems",
             cards: [
                 {
                     type: "text",
@@ -27,7 +27,7 @@
                 },
                 {
                     type: "text",
-                    value: "you are the big gay"
+                    value: "Sometimes picked up list will lock to a listPositions value"
                 }
             ],
             element: undefined
@@ -39,6 +39,10 @@
                 {
                     type: "text",
                     value: "Absolutely nothing"
+                },
+                {
+                    type: "text",
+                    value: "You are the mega gay"
                 },
                 {
                     type: "image",
@@ -73,10 +77,9 @@
     function UpdateMousePosition(event){
         mouse = {x: event.clientX, y: event.clientY};
         if(currentList != -1){
+            closestList = GetClosestIndexInArray(mouse.x, listPositions)
             lists[currentList].element.style.left = mouse.x + "px";
             lists[currentList].element.style.top = mouse.y + "px";
-            closestList = GetClosestIndexInArray(mouse.x, listPositions)
-            console.log(closestList)
         }
     }
     let listPositions = []
@@ -95,6 +98,8 @@
                 listPositions.push(GetLeftValue(lists[j].element))
             }
             listPositions.sort((a, b) => a - b)
+            lists[i].element.style.left = mouse.x + "px";
+            lists[i].element.style.top = mouse.y + "px";
         }
         //When you click it in place
         else{
@@ -208,8 +213,7 @@
         background-color: var(--bg-color);
         border-radius: 10px;
         width: 100%;
-        min-height: 75px;
-        max-height: fit-content;
+        height: fit-content;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -225,19 +229,21 @@
         height: 100%;
         background-color: var(--bg-accent);
         aspect-ratio: 10 / 16;
+        width: auto;
         border-radius: 15px;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         box-sizing: border-box;
+        text-align: center;
         padding: 15px;
     }
     .moving {
         position: absolute;
-        height: 75%;
+        height: 75vh;
+        width: auto;
         transform: translate(-45px, -45px);
-        left: 0;
     }
     .topOfList {
         display: flex;
@@ -257,6 +263,8 @@
         left: auto;
     }
     .list {
+        user-select: none;
+
         border: 2px solid var(--accent-col);
         border-radius: 10px;
         width: 100%;
@@ -270,6 +278,15 @@
 
         box-sizing: border-box;
         padding: 10px;
+    }
+    ::-webkit-scrollbar {
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: var(--dark-bg);
+        border: 2px solid var(--bg-accent);
+        
     }
 
 
