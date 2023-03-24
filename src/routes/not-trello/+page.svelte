@@ -1,10 +1,12 @@
 <script>
+
     let mouse = {x: 0, y: 0}
     let currentList = -1;
     let lists = [
         {
             isMoving: false,
-            title: "Todo",
+            title: "Todo 0",
+            originalIndex: 0,
             cards: [
                 {
                     type: "text",
@@ -19,7 +21,8 @@
         },
         {
             isMoving: false,
-            title: "Known problems",
+            title: "yup :) 1",
+            originalIndex: 1,
             cards: [
                 {
                     type: "text",
@@ -34,7 +37,8 @@
         },
         {
             isMoving: false,
-            title: "Done",
+            title: "Done 2",
+            originalIndex: 2,
             cards: [
                 {
                     type: "text",
@@ -61,6 +65,7 @@
         var element = arr[fromIndex];
         arr.splice(fromIndex, 1);
         arr.splice(toIndex, 0, element);
+        lists = arr;
     }
     function GetLeftValue(element){
         return element.getBoundingClientRect().left;
@@ -76,10 +81,10 @@
     }
     function UpdateMousePosition(event){
         mouse = {x: event.clientX, y: event.clientY};
-        if(currentList != -1){
+        if(currentList != -1 && lists[currentList].isMoving){
             closestList = GetClosestIndexInArray(mouse.x, listPositions)
-            lists[currentList].element.style.left = mouse.x + "px";
-            lists[currentList].element.style.top = mouse.y + "px";
+            lists[lists[currentList].originalIndex].element.style.left = mouse.x + "px";
+            lists[lists[currentList].originalIndex].element.style.top = mouse.y + "px";  
         }
     }
     let listPositions = []
@@ -90,7 +95,9 @@
             return;
         }
         //When you click it while not moving
+
         if(!lists[i].isMoving){
+            lists[i].isMoving = true;
             currentList = i;
             listPositions = []
             oldListPosition = i;
@@ -98,18 +105,19 @@
                 listPositions.push(GetLeftValue(lists[j].element))
             }
             listPositions.sort((a, b) => a - b)
-            lists[i].element.style.left = mouse.x + "px";
-            lists[i].element.style.top = mouse.y + "px";
+            lists[lists[i].originalIndex].element.style.left = mouse.x + "px";
+            lists[lists[i].originalIndex].element.style.top = mouse.y + "px";
         }
         //When you click it in place
-        else{
+        else {
+            lists[i].isMoving = false;
             MoveInArray(lists, oldListPosition, closestList)
             i = closestList;
             currentList = -1;
             closestList = -1;
 
+            oldListPosition = -1;
         }
-        lists[i].isMoving = !lists[i].isMoving;
         lists = lists;
     }
     function DeleteList(i){
@@ -241,7 +249,7 @@
     }
     .moving {
         position: absolute;
-        height: 75vh;
+        height: 60vh;
         width: auto;
         transform: translate(-45px, -45px);
     }
