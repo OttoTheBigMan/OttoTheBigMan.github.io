@@ -1,64 +1,66 @@
 <script>
+    import CreateNew from "../../lib/components/CreateNew.svelte";
 
     let mouse = {x: 0, y: 0}
     let currentList = -1;
+    let listElements = [undefined, undefined, undefined]
     let lists = [
         {
             isMoving: false,
-            title: "Todo 0",
-            originalIndex: 0,
+            title: "Todo",
             cards: [
                 {
+                    moving: false,
                     type: "text",
                     value: "Hello there"
                 },
                 {
+                    moving: false,
                     type: "text",
                     value: "HEHEHEHAW"
                 }
             ],
-            element: undefined
+            elements: []
         },
         {
             isMoving: false,
-            title: "yup :) 1",
-            originalIndex: 1,
+            title: "yup :)",
             cards: [
                 {
+                    moving: false,
                     type: "text",
                     value: "Hello there"
-                },
-                {
-                    type: "text",
-                    value: "Sometimes picked up list will lock to a listPositions value"
                 }
             ],
-            element: undefined
+            elements: []
         },
         {
             isMoving: false,
-            title: "Done 2",
-            originalIndex: 2,
+            title: "Done",
             cards: [
                 {
+                    moving: false,
                     type: "text",
                     value: "Absolutely nothing"
                 },
                 {
+                    moving: false,
                     type: "text",
                     value: "You are the mega gay"
                 },
                 {
+                    moving: false,
                     type: "image",
                     value: "/icons/delete.png"
                 },
                 {
+                    moving: false,
                     type: "link",
                     path: "/",
                     value: "Go back to the homepage :)"
                 }
             ],
-            element: undefined
+            elements: []
         }
     ]
     function MoveInArray(arr, fromIndex, toIndex) {
@@ -69,6 +71,9 @@
     }
     function GetLeftValue(element){
         return element.getBoundingClientRect().left;
+    }
+    function GetTopValue(element){
+        return element.getBoundingClientRect().top;
     }
     function GetClosestIndexInArray(val, arr){
         let curr = arr[0];
@@ -83,8 +88,8 @@
         mouse = {x: event.clientX, y: event.clientY};
         if(currentList != -1 && lists[currentList].isMoving){
             closestList = GetClosestIndexInArray(mouse.x, listPositions)
-            lists[lists[currentList].originalIndex].element.style.left = mouse.x + "px";
-            lists[lists[currentList].originalIndex].element.style.top = mouse.y + "px";  
+            listElements[currentList].style.left = mouse.x + "px";
+            listElements[currentList].style.top = mouse.y + "px";  
         }
     }
     let listPositions = []
@@ -99,14 +104,15 @@
         if(!lists[i].isMoving){
             lists[i].isMoving = true;
             currentList = i;
-            listPositions = []
+            listPositions = [];
             oldListPosition = i;
             for(let j = 0; j < lists.length; j++){
-                listPositions.push(GetLeftValue(lists[j].element))
+                listPositions.push(GetLeftValue(listElements[j]))
             }
             listPositions.sort((a, b) => a - b)
-            lists[lists[i].originalIndex].element.style.left = mouse.x + "px";
-            lists[lists[i].originalIndex].element.style.top = mouse.y + "px";
+            closestList = GetClosestIndexInArray(mouse.x, listPositions)
+            listElements[i].style.left = mouse.x + "px";
+            listElements[i].style.top = mouse.y + "px";  
         }
         //When you click it in place
         else {
@@ -120,8 +126,21 @@
         }
         lists = lists;
     }
+    let currentCard = [-1, -1]
+    let closestCard = [-1, -1]
+    function MoveCard(i, j){
+        const card = lists[i].cards[j];
+
+    }
     function DeleteList(i){
-        //Currently does not delete list, but will later :)
+        
+    }
+
+    let newType = "text";
+    let newVisible = false;
+    function CreateCard(type){
+        newType = type;
+        newVisible = true;
     }
 </script>
 
@@ -129,14 +148,19 @@
     <!-- Logo: -->
     <div class="logo">
         <img src="/logo.png" alt="logo">
-        <p>Not Trello</p>
+        <p>NoTrello</p>
     </div>
     <!-- List in which new cards are made: -->
-    <div class="section new"></div>
+    <div class="section new">
+        <button class="createNew">Create text card</button>
+        <button class="createNew">Create image card</button>
+        <button class="createNew">Create link card</button>
+        <CreateNew type={newType} invisible={!newVisible}></CreateNew>
+    </div>
     <!-- Section with all the lists: -->
     <div class="section main">
         {#each lists as list, i}
-            <div class="listParent" class:moving={list.isMoving} bind:this={list.element}>
+            <div class="listParent" class:moving={list.isMoving} bind:this={listElements[i]}>
                 <div class="topOfList">
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="icon" src="/icons/moveicon.png" alt="move" on:click={() => {Move(i)}} on:keypress={() => {Move(i)}}>
@@ -145,14 +169,14 @@
                 </div>
                 
                 <div class="list">
-                    {#each list.cards as card}
-                        <div class="element">
+                    {#each list.cards as card, j}
+                        <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]}>
                             {#if card.type == "text"}
                                 <p>{card.value}</p>
                             {:else if card.type == "link"}
                                 <a href="{card.path}">{card.value}</a>
                             {:else if card.type == "image"}
-                                <img src="{card.value}" alt="bollar">
+                                <img src="{card.value}" alt="No errors?">
                             {/if}
                         </div>
                     {/each}
@@ -170,6 +194,7 @@
     :root {
         --bg-color: #1f2937;
         --bg-accent: #374151;
+        --bg-accent-2: #29313D;
         --prim-col: #fbbf24;
         --sec-col: #fcd34d;
         --accent-col: #0891b2;
@@ -217,6 +242,7 @@
         box-sizing: border-box;
         padding: 35px;
     }
+    
     .element {
         background-color: var(--bg-color);
         border-radius: 10px;
@@ -231,6 +257,7 @@
     }
     .element img {
         width: 100%;
+        pointer-events: none;
     }
     
     .listParent {
@@ -246,6 +273,10 @@
         box-sizing: border-box;
         text-align: center;
         padding: 15px;
+    }
+    .movingCard {
+        position: absolute;
+        transform: translate(-50%, -50%)
     }
     .moving {
         position: absolute;
@@ -288,13 +319,13 @@
         padding: 10px;
     }
     ::-webkit-scrollbar {
-        background-color: transparent;
+        background-color: var(--bg-accent-2);
+        border-radius: 10px;
     }
     ::-webkit-scrollbar-thumb {
         border-radius: 10px;
         background-color: var(--dark-bg);
-        border: 2px solid var(--bg-accent);
-        
+        border: 2px solid var(--bg-accent-2);
     }
 
 
@@ -304,10 +335,31 @@
 
         display: flex;
         flex-direction: column;
+        gap: 10px;
         align-items: center;
+
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    .createNew {
+        width: 100%;
+        aspect-ratio: 4 / 1;
+
+        color: var(--text-col);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+
+        background-color: var(--bg-accent);
+        border: none;
+
+        font-size: x-large;
+    }
+    .createNew:hover {
+        background-color: var(--bg-accent-2);
     }
     .logo {
-
         display: flex;
         align-items: center;
         justify-content: center;
