@@ -75,6 +75,12 @@
     function GetTopValue(element){
         return element.getBoundingClientRect().top;
     }
+    function GetBottomValue(element){
+        return element.getBoundingClientRect().bottom;
+    }
+    function GetElementWidth(element){
+        return element.getBoundingClientRect().width;
+    }
     function GetClosestIndexInArray(val, arr){
         let curr = arr[0];
         arr.forEach(num => {
@@ -91,12 +97,47 @@
             listElements[currentList].style.left = mouse.x + "px";
             listElements[currentList].style.top = mouse.y + "px";  
         }
+        if(cardIsMoving && lists[currentCard[0]].cards[currentCard[1]].moving){
+            closestList = GetClosestIndexInArray(mouse.x, listPositions)
+            lists[currentCard[0]].elements[currentCard[1]].style.left = mouse.x + "px";
+            lists[currentCard[0]].elements[currentCard[1]].style.top = mouse.y + "px";
+            closestCard[0] = GetClosestIndexInArray(mouse.x, listPositions)
+            const arr = []
+            console.log( lists[closestCard[0]].elements.length)
+            for (let i = 0; i < lists[closestCard[0]].elements.length; i++) {
+                
+                if(lists[closestCard[0]].elements[i] != null){
+                    if(lists[closestCard[0]].elements[i].classList.contains("movingCard")){
+                        continue;
+                    }
+                    arr.push(GetTopValue(lists[closestCard[0]].elements[i]));
+                    if(lists[closestCard[0]].elements.length - i == 1){
+                        arr.push(GetBottomValue(lists[closestCard[0]].elements[i]) + 10)
+                    }
+                }
+                
+            }
+            arr.sort((a,b) => a - b)
+            closestCard[1] = GetClosestIndexInArray(mouse.y, arr)
+            console.log(mouse.y)
+            console.log(arr)
+
+        }
+    }
+
+    function GenerateListPositions(){
+
+        listPositions = [];
+        for(let j = 0; j < lists.length; j++){
+            listPositions.push(GetLeftValue(listElements[j]))
+        }
+        listPositions.sort((a, b) => a - b)
     }
     let listPositions = []
     let closestList = -1;
     let oldListPosition = -1;
     function Move(i){
-        if(currentList != -1 && !lists[i].isMoving){
+        if(currentList != -1 && !lists[i].isMoving || cardIsMoving){
             return;
         }
         //When you click it while not moving
@@ -104,12 +145,8 @@
         if(!lists[i].isMoving){
             lists[i].isMoving = true;
             currentList = i;
-            listPositions = [];
             oldListPosition = i;
-            for(let j = 0; j < lists.length; j++){
-                listPositions.push(GetLeftValue(listElements[j]))
-            }
-            listPositions.sort((a, b) => a - b)
+            GenerateListPositions()
             closestList = GetClosestIndexInArray(mouse.x, listPositions)
             listElements[i].style.left = mouse.x + "px";
             listElements[i].style.top = mouse.y + "px";  
@@ -126,11 +163,55 @@
         }
         lists = lists;
     }
+    let cardIsMoving = false;
+
     let currentCard = [-1, -1]
     let closestCard = [-1, -1]
     function MoveCard(i, j){
-        const card = lists[i].cards[j];
+        if(lists[i].cards[j].moving != cardIsMoving){
+            return;
+        }
+        if(!lists[i].cards[j].moving){
+            lists[i].cards[j].moving = true;
+            GenerateListPositions()
+            for (let k = 0; k < listPositions.length; k++) {
+                listPositions[k] += GetElementWidth(listElements[k]) / 2;
+            }
+            currentCard = [i, j];
+            cardIsMoving = true;
 
+            lists[currentCard[0]].elements[currentCard[1]].style.left = mouse.x + "px";
+            lists[currentCard[0]].elements[currentCard[1]].style.top = mouse.y + "px";
+
+            closestCard[0] = GetClosestIndexInArray(mouse.x, listPositions)
+            const arr = []
+            console.log( lists[closestCard[0]].elements.length)
+            for (let i = 0; i < lists[closestCard[0]].elements.length; i++) {
+                if(lists[closestCard[0]].elements[i].classList.contains("movingCard")){
+                    continue;
+                }
+                if(lists[closestCard[0]].elements[i] != null){
+                    arr.push(GetTopValue(lists[closestCard[0]].elements[i]));
+                }
+                if(lists[closestCard[0]].elements.length - i == 1){
+                    arr.push(GetBottomValue(lists[closestCard[0]].elements[i]) + 10)
+                }
+            }
+            arr.sort((a,b) => a - b)
+            closestCard[1] = GetClosestIndexInArray(mouse.y, arr)
+        }
+        else if(lists[i].cards[j].moving){
+            //Snap it to the closest card position.
+            lists[i].cards[j].moving = false;
+            cardIsMoving = false;
+            const el = lists[i].cards.splice(j, 1);
+            lists[i].cards = lists[i].cards
+            lists[closestCard[0]].cards.splice(closestCard[1], 0, ...el)
+            lists[closestCard[0]].cards = lists[closestCard[0]].cards;
+            lists = lists;
+            currentCard = [-1, -1]
+        }
+        
     }
     function DeleteList(i){
         
@@ -148,7 +229,7 @@
     <!-- Logo: -->
     <div class="logo">
         <img src="/logo.png" alt="logo">
-        <p>NoTrello</p>
+        <p>Not Trello</p>
     </div>
     <!-- List in which new cards are made: -->
     <div class="section new">
@@ -170,7 +251,8 @@
                 
                 <div class="list">
                     {#each list.cards as card, j}
-                        <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]}>
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]} on:click={() => {MoveCard(i, j)}}>
                             {#if card.type == "text"}
                                 <p>{card.value}</p>
                             {:else if card.type == "link"}
@@ -276,7 +358,12 @@
     }
     .movingCard {
         position: absolute;
-        transform: translate(-50%, -50%)
+        width: fit-content;
+        transform: translate(-50%, -50%);
+        max-width: 150px;
+    }
+    .movingCard a {
+        pointer-events: none;
     }
     .moving {
         position: absolute;
