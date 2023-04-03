@@ -1,11 +1,12 @@
 <script>
+    import { writable } from 'svelte/store';
     import CreateNew from "../../lib/components/CreateNew.svelte";
 
     let mouse = {x: 0, y: 0}
     let currentList = -1;
     let listElements = [undefined, undefined, undefined]
     let lists = [
-        {
+        writable({
             isMoving: false,
             title: "Todo",
             cards: [
@@ -21,8 +22,8 @@
                 }
             ],
             elements: []
-        },
-        {
+        }),
+        writable({
             isMoving: false,
             title: "yup :)",
             cards: [
@@ -33,8 +34,8 @@
                 }
             ],
             elements: []
-        },
-        {
+        }),
+        writable({
             isMoving: false,
             title: "Done",
             cards: [
@@ -51,7 +52,7 @@
                 {
                     moving: false,
                     type: "image",
-                    value: "/icons/delete.png"
+                    value: "https://www.xfire.com/wp-content/uploads/2022/08/cropped-walter-white-might-be-headed-to-multiversus-8.jpg.webp"
                 },
                 {
                     moving: false,
@@ -61,8 +62,13 @@
                 }
             ],
             elements: []
-        }
+        })
     ]
+    lists.forEach((list, i) => {
+    list.subscribe(value => {
+            lists[i] = value;
+        });
+    }); 
     function MoveInArray(arr, fromIndex, toIndex) {
         var element = arr[fromIndex];
         arr.splice(fromIndex, 1);
@@ -90,8 +96,14 @@
         });
         return arr.indexOf(curr);
     }
+    function MouseWithinRadius(x, y, radius){
+        const distX = (mouse.x - x) * (mouse.x - x);
+        const distY = (mouse.y - y) * (mouse.y - y);
+        return distX + distY <= radius * radius;
+    }
     function UpdateMousePosition(event){
         mouse = {x: event.clientX, y: event.clientY};
+        deleteCardHover = MouseWithinRadius(75 + GetLeftValue(deleteCardElement), 75 + GetTopValue(deleteCardElement), 75)
         if(currentList != -1 && lists[currentList].isMoving){
             closestList = GetClosestIndexInArray(mouse.x, listPositions)
             listElements[currentList].style.left = mouse.x + "px";
@@ -103,24 +115,21 @@
             lists[currentCard[0]].elements[currentCard[1]].style.top = mouse.y + "px";
             closestCard[0] = GetClosestIndexInArray(mouse.x, listPositions)
             const arr = []
-            console.log( lists[closestCard[0]].elements.length)
             for (let i = 0; i < lists[closestCard[0]].elements.length; i++) {
                 
                 if(lists[closestCard[0]].elements[i] != null){
                     if(lists[closestCard[0]].elements[i].classList.contains("movingCard")){
                         continue;
                     }
-                    arr.push(GetTopValue(lists[closestCard[0]].elements[i]));
+                    arr.push(GetTopValue(lists[closestCard[0]].elements[i]) - 5);
                     if(lists[closestCard[0]].elements.length - i == 1){
-                        arr.push(GetBottomValue(lists[closestCard[0]].elements[i]) + 10)
+                        arr.push(GetBottomValue(lists[closestCard[0]].elements[i]) + 5)
                     }
                 }
                 
             }
             arr.sort((a,b) => a - b)
             closestCard[1] = GetClosestIndexInArray(mouse.y, arr)
-            console.log(mouse.y)
-            console.log(arr)
 
         }
     }
@@ -172,6 +181,7 @@
             return;
         }
         if(!lists[i].cards[j].moving){
+            cardAdded(i, j);
             lists[i].cards[j].moving = true;
             GenerateListPositions()
             for (let k = 0; k < listPositions.length; k++) {
@@ -185,7 +195,6 @@
 
             closestCard[0] = GetClosestIndexInArray(mouse.x, listPositions)
             const arr = []
-            console.log( lists[closestCard[0]].elements.length)
             for (let i = 0; i < lists[closestCard[0]].elements.length; i++) {
                 if(lists[closestCard[0]].elements[i].classList.contains("movingCard")){
                     continue;
@@ -202,6 +211,12 @@
         }
         else if(lists[i].cards[j].moving){
             //Snap it to the closest card position.
+
+            if(deleteCardHover){
+                DeleteCard(i, j);
+                return;
+            }
+
             lists[i].cards[j].moving = false;
             cardIsMoving = false;
             const el = lists[i].cards.splice(j, 1);
@@ -213,15 +228,52 @@
         }
         
     }
+    function cardAdded(listIndex, cardIndex) {
+        const list = lists[listIndex];
+
+        // update the bind:this values in the list
+        const elements = listElements[listIndex].querySelectorAll(".element");
+        lists[listIndex].elements = [...elements];
+
+        // update the bind:this values in all the lists
+        for (let i = 0; i < lists.length; i++) {
+            const elements = listElements[i].querySelectorAll(".element");
+            lists[i].elements = [...elements];
+        }
+    }
+    let deleteCardHover = false;
+    let deleteCardElement = null;
+    function DeleteCard(i, j){
+        lists[i].cards.splice(j, 1)
+        cardAdded(i, j);
+        cardIsMoving = false;
+        currentCard = [-1, -1]
+        lists = lists;
+    }
     function DeleteList(i){
         
     }
-
     let newType = "text";
     let newVisible = false;
     function CreateCard(type){
+        if(lists.length == 0){
+            alert("You are obligated to create a list before creating a card.")
+            return;
+        }
         newType = type;
         newVisible = true;
+    }
+    function CloseCreateMenu(){
+        newVisible = false;
+    }
+    function AddCard(card){
+        newVisible = false;
+        card.moving = false;
+        console.log(card)
+        lists[lists.length - 1].cards.push(JSON.parse(JSON.stringify(card)));
+        lists = lists;
+        cardAdded(lists.length - 1, lists[lists.length - 1].cards.length - 1)
+        MoveCard(lists.length - 1, lists[lists.length - 1].cards.length - 1)
     }
 </script>
 
@@ -233,10 +285,10 @@
     </div>
     <!-- List in which new cards are made: -->
     <div class="section new">
-        <button class="createNew">Create text card</button>
-        <button class="createNew">Create image card</button>
-        <button class="createNew">Create link card</button>
-        <CreateNew type={newType} invisible={!newVisible}></CreateNew>
+        <button class="createNew" on:click={() => {CreateCard("text")}}>Create text card</button>
+        <button class="createNew" on:click={() => {CreateCard("image")}}>Create image card</button>
+        <button class="createNew" on:click={() => {CreateCard("link")}}>Create link card</button>
+        <CreateNew type={newType} invisible={!newVisible} createFunction={AddCard} closeFunction={CloseCreateMenu}></CreateNew>
     </div>
     <!-- Section with all the lists: -->
     <div class="section main">
@@ -252,7 +304,7 @@
                 <div class="list">
                     {#each list.cards as card, j}
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]} on:click={() => {MoveCard(i, j)}}>
+                        <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]} on:click={() => {MoveCard(i, j); }}>
                             {#if card.type == "text"}
                                 <p>{card.value}</p>
                             {:else if card.type == "link"}
@@ -265,6 +317,8 @@
                 </div>
             </div>
         {/each}
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving} on:mouseover={() => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
     </div>
     <!-- Settings menu with save and load: -->
     <div class="section">
@@ -324,9 +378,28 @@
         box-sizing: border-box;
         padding: 35px;
     }
-    
+    #cardDelete {
+        transition: 0.25s;
+        background-image: url(icons/trash.png);
+        background-size: 50%;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: absolute;
+        width: 150px;
+        aspect-ratio: 1;
+        border-radius: 100%;
+        pointer-events: visible;
+        left: 25px;
+        bottom: -175px;
+    }
+    #cardDelete.cardIsMoving {
+        bottom: 25px;
+    }
+    #cardDelete.cardIsMoving.fakeHover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
     .element {
-        background-color: var(--bg-color);
+        background-color: var(--bg-accent-2);
         border-radius: 10px;
         width: 100%;
         height: fit-content;
@@ -360,6 +433,7 @@
         position: absolute;
         width: fit-content;
         transform: translate(-50%, -50%);
+        z-index: 1;
         max-width: 150px;
     }
     .movingCard a {
