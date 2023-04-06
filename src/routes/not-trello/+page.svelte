@@ -1,10 +1,11 @@
 <script>
     import { writable } from 'svelte/store';
+    import Confirm from '../../lib/components/Confirm.svelte';
     import CreateNew from "../../lib/components/CreateNew.svelte";
 
     let mouse = {x: 0, y: 0}
     let currentList = -1;
-    let listElements = [undefined, undefined, undefined]
+    let listElements = []
     let lists = [
         writable({
             isMoving: false,
@@ -30,7 +31,7 @@
                 {
                     moving: false,
                     type: "text",
-                    value: "Hello there"
+                    value: "I think Moto moto likes you"
                 }
             ],
             elements: []
@@ -47,7 +48,7 @@
                 {
                     moving: false,
                     type: "text",
-                    value: "You are the mega gay"
+                    value: "What is this"
                 },
                 {
                     moving: false,
@@ -65,7 +66,7 @@
         })
     ]
     lists.forEach((list, i) => {
-    list.subscribe(value => {
+        list.subscribe(value => {
             lists[i] = value;
         });
     }); 
@@ -162,6 +163,10 @@
         }
         //When you click it in place
         else {
+            if(deleteCardHover){
+                DeleteList(i)
+                return;
+            }
             lists[i].isMoving = false;
             MoveInArray(lists, oldListPosition, closestList)
             i = closestList;
@@ -181,7 +186,7 @@
             return;
         }
         if(!lists[i].cards[j].moving){
-            cardAdded(i, j);
+            cardAdded();
             lists[i].cards[j].moving = true;
             GenerateListPositions()
             for (let k = 0; k < listPositions.length; k++) {
@@ -228,15 +233,17 @@
         }
         
     }
-    function cardAdded(listIndex, cardIndex) {
-        const list = lists[listIndex];
+    function cardAdded() {
 
-        // update the bind:this values in the list
-        const elements = listElements[listIndex].querySelectorAll(".element");
-        lists[listIndex].elements = [...elements];
+        // // update the bind:this values in the list
+        // const elements = listElements[listIndex].querySelectorAll(".element");
+        // lists[listIndex].elements = [...elements];
 
         // update the bind:this values in all the lists
-        for (let i = 0; i < lists.length; i++) {
+        for (let i = 0; i < listElements.length; i++) {
+            if(!listElements[i]){
+                continue
+            }
             const elements = listElements[i].querySelectorAll(".element");
             lists[i].elements = [...elements];
         }
@@ -245,13 +252,24 @@
     let deleteCardElement = null;
     function DeleteCard(i, j){
         lists[i].cards.splice(j, 1)
-        cardAdded(i, j);
+        cardAdded();
         cardIsMoving = false;
         currentCard = [-1, -1]
         lists = lists;
     }
+    let listDeleteIndex = -1;
+    let listDelVisible = false;
     function DeleteList(i){
+        listDelVisible = false;
+        lists[i].isMoving = false;
         
+        lists.splice(i, 1);
+
+        listElements.splice(i, 1);
+        currentList = -1;
+        lists = lists;
+        cardAdded();
+
     }
     let newType = "text";
     let newVisible = false;
@@ -269,10 +287,9 @@
     function AddCard(card){
         newVisible = false;
         card.moving = false;
-        console.log(card)
         lists[lists.length - 1].cards.push(JSON.parse(JSON.stringify(card)));
         lists = lists;
-        cardAdded(lists.length - 1, lists[lists.length - 1].cards.length - 1)
+        cardAdded()
         MoveCard(lists.length - 1, lists[lists.length - 1].cards.length - 1)
     }
 </script>
@@ -293,15 +310,16 @@
     <!-- Section with all the lists: -->
     <div class="section main">
         {#each lists as list, i}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="listParent" class:moving={list.isMoving} bind:this={listElements[i]}>
                 <div class="topOfList">
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="icon" src="/icons/moveicon.png" alt="move" on:click={() => {Move(i)}} on:keypress={() => {Move(i)}}>
                     <h1>{list.title}</h1>
-                    <img class="icon" id="deleteButton" src="/icons/delete.png" alt="delete" on:click={() => {DeleteList(i)}} on:keypress={() => {DeleteList(i)}}>
+                    <img class="icon" id="deleteButton" src="/icons/settings.png" alt="delete">
                 </div>
                 
-                <div class="list">
+                <div class="list" >
                     {#each list.cards as card, j}
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]} on:click={() => {MoveCard(i, j); }}>
@@ -310,15 +328,17 @@
                             {:else if card.type == "link"}
                                 <a href="{card.path}">{card.value}</a>
                             {:else if card.type == "image"}
-                                <img src="{card.value}" alt="No errors?">
+                                <img src="{card.value}" alt="crazy pic">
                             {/if}
                         </div>
                     {/each}
                 </div>
             </div>
         {/each}
+        <Confirm visible={listDelVisible} confirmFunc={DeleteList} denyFunc={() => listDelVisible = false}  message={"Would you like to delete list " + (listDeleteIndex >= 0 ? lists[listDeleteIndex].title : "") + "?"}  funcArg={listDeleteIndex}></Confirm>
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving} on:mouseover={() => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
+        
+        <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving || (currentList != -1 && lists[currentList].isMoving)} on:mouseover={(suii) => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
     </div>
     <!-- Settings menu with save and load: -->
     <div class="section">
@@ -343,6 +363,9 @@
         --dark-bg-accent: #374151;
         --dark-text: #E0D6C8;
         --light-text: black;
+    }
+    :global(body){
+        overflow: hidden;
     }
     .bg {
         width: 100vw;
@@ -442,6 +465,7 @@
     .moving {
         position: absolute;
         height: 60vh;
+        z-index: 1;
         width: auto;
         transform: translate(-45px, -45px);
     }

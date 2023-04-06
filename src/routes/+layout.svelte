@@ -32,6 +32,9 @@
         padding: 0;
         overflow: hidden;
     }
+    :root {
+        --barColor: #5f6a7b;
+    }
     .bar {
         z-index: 69420;
 
@@ -39,7 +42,7 @@
         border-radius: 10px;
         border: 2px solid black;
         box-shadow: 2px 2px black;
-        background-color: #E08B41;
+        background-color: var(--barColor);
 
         position: absolute;
         display: flex;
