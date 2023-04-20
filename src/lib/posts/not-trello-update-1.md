@@ -1,14 +1,46 @@
 # Coola features:
-<ul>
-    <li>Man kan flytta listor</li>
-    <li>Man kan flytta kort mellan listor</li>
-    <li>Man kan ta bort kort och listor</li>
-    <li>Man kan skapa nya kort av olika typer</li>
-</ul>
 
-Dokumenterat den 17 / 4 - 2023
+Just nu har jag fixat ett system där man kan göra flera listor med små kort som kan innehålla text, en bild eller en länk. Man kan flytta runt de här korten i listorna och från en lista till en annan. Det är också möjligt att skapa nya kort och ta bort kort. Listor går också att ta bort och flytta runt. 
 
-Lite source code:
+# Coola featurs igen 😐:
+
+### Nödvändiga features
+
+✅Göra todo-listor och grejer inuti dem.
+
+✅Flytta grejer mellan listor.
+
+✅Flytta listor
+
+❌Save / Load
+
+✅Skapa nya kort
+
+❌Skapa nya listor
+
+### Mindre kritiska features
+
+✅Kunna skicka in bilder i listorna
+
+✅Kunna ha länkar i listorna
+
+### Features jag vill göra i mån om tid
+
+❌Flera tavlor.
+
+❌Redigera kort / listor
+
+❌Flera color-themes.
+
+### Features jag gör om jag varit on the grind
+
+❌3d animations😎
+
+# Annan info:
+
+Dokumenterat den 20 / 4 - 2023
+
+# Lite source code:
 
 ```js
 let cardIsMoving = false;
@@ -67,4 +99,7 @@ function MoveCard(i, j){
     
 }
 ```
+
+# Screenshot
+
 <img src="/not-trello-screenshot-1.png" alt="waltuh">

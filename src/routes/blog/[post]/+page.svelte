@@ -15,7 +15,7 @@
     .post {
         margin: 5vh 0;
         background-color: #313335;
-        width: 40%;
+        width: 65%;
         min-height: 75vh;
         max-height: fit-content;
         border-radius: 25px;
