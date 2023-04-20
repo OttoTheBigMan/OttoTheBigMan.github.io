@@ -291,7 +291,6 @@
         card.moving = false;
         lists[0].cards.unshift(JSON.parse(JSON.stringify(card)));
         
-
         lists = lists;
 
         UpdateElementReferences()
