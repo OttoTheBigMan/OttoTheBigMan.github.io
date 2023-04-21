@@ -1,6 +1,5 @@
 <script>
     import { writable } from 'svelte/store';
-    import Confirm from '../../lib/components/Confirm.svelte';
     import CreateNew from "../../lib/components/CreateNew.svelte";
 
     let mouse = {x: 0, y: 0}
@@ -335,7 +334,6 @@
                 </div>
             </div>
         {/each}
-        <Confirm visible={listDelVisible} confirmFunc={DeleteList} denyFunc={() => listDelVisible = false}  message={"Would you like to delete list " + (listDeleteIndex >= 0 ? lists[listDeleteIndex].title : "") + "?"}  funcArg={listDeleteIndex}></Confirm>
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         
         <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving || (currentList != -1 && lists[currentList].isMoving)} on:mouseover={(suii) => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
