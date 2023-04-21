@@ -1,5 +1,7 @@
 <script>
     import { writable } from 'svelte/store';
+    import { onMount } from 'svelte';
+    import Confirm from '../../lib/components/Confirm.svelte';
     import CreateNew from "../../lib/components/CreateNew.svelte";
 
     let mouse = {x: 0, y: 0}
@@ -185,7 +187,7 @@
             return;
         }
         if(!lists[i].cards[j].moving){
-            cardAdded();
+            UpdateElementReferences();
             lists[i].cards[j].moving = true;
             GenerateListPositions()
             for (let k = 0; k < listPositions.length; k++) {
@@ -220,7 +222,6 @@
                 DeleteCard(i, j);
                 return;
             }
-
             lists[i].cards[j].moving = false;
             cardIsMoving = false;
             const el = lists[i].cards.splice(j, 1);
@@ -232,7 +233,10 @@
         }
         
     }
-    function cardAdded() {
+    onMount(() => {
+        UpdateElementReferences()
+    })
+    function UpdateElementReferences() {
 
         // // update the bind:this values in the list
         // const elements = listElements[listIndex].querySelectorAll(".element");
@@ -251,7 +255,7 @@
     let deleteCardElement = null;
     function DeleteCard(i, j){
         lists[i].cards.splice(j, 1)
-        cardAdded();
+        UpdateElementReferences();
         cardIsMoving = false;
         currentCard = [-1, -1]
         lists = lists;
@@ -260,15 +264,14 @@
     let listDelVisible = false;
     function DeleteList(i){
         listDelVisible = false;
-        lists[i].isMoving = false;
-        
+        // lists[i].isMoving = false;
+        lists[i].cards = [];
         lists.splice(i, 1);
 
         listElements.splice(i, 1);
         currentList = -1;
         lists = lists;
-        cardAdded();
-
+        UpdateElementReferences();
     }
     let newType = "text";
     let newVisible = false;
@@ -286,10 +289,11 @@
     function AddCard(card){
         newVisible = false;
         card.moving = false;
-        lists[lists.length - 1].cards.push(JSON.parse(JSON.stringify(card)));
+        lists[0].cards.unshift(JSON.parse(JSON.stringify(card)));
+        
         lists = lists;
-        cardAdded()
-        MoveCard(lists.length - 1, lists[lists.length - 1].cards.length - 1)
+
+        UpdateElementReferences()
     }
 </script>
 
@@ -318,10 +322,10 @@
                     <img class="icon" id="deleteButton" src="/icons/settings.png" alt="delete">
                 </div>
                 
-                <div class="list" >
+                <div class="list">
                     {#each list.cards as card, j}
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <div class="element" class:movingCard={card.moving} bind:this={list.elements[j]} on:click={() => {MoveCard(i, j); }}>
+                        <div class="element" class:movingCard={card.moving} on:click={() => {MoveCard(i, j); }}>
                             {#if card.type == "text"}
                                 <p>{card.value}</p>
                             {:else if card.type == "link"}
