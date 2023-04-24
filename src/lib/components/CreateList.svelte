@@ -1,42 +1,33 @@
 <script>
-    export let type;
+    import { writable } from 'svelte/store';
+
     export let invisible = true;
     export let createFunction = undefined;
     export let closeFunction = undefined;
-    const newCard = {
-                        moving: true,
-                        type: type,
-                        path: undefined,
-                        value: ""
-                    }
+    let title = "";
+    
+    const newList = {
+        isMoving: false,
+        title: title,
+        cards: [],
+        elements: []
+    }
     function Create(){
-        newCard.type = type;
-        createFunction(newCard);
-        newCard.path = ""
-        newCard.value = ""
+        newList.title = JSON.parse(JSON.stringify(title));
+        createFunction(newList);
+        title = "";
     }
     function Close(){
-        newCard.type = type;
         closeFunction();
-        newCard.value = ""
-        newCard.path = ""
+        title = ""
     }
 </script>
 
 <div class="window" class:invisible={invisible}>
     <button id="closeButton" on:click={Close}></button>
-    <h1>Create new card</h1>
-    {#if type=="image"}
-        <input type="text" placeholder="Paste image URL..." bind:value={newCard.value}/>
-    {:else if type=="link"}
-        <div id="hehehehaw">
-            <input type="text" placeholder="Link url goes here..." bind:value={newCard.path}>
-            <input type="text" placeholder="Link text goes here..." bind:value={newCard.value}>
-        </div>
-    {:else if type=="text"}
-        <input type="text" placeholder="What to do..." bind:value={newCard.value}>
-    {/if}
-    <button id="CreateButton" on:click={Create}>Create card</button>
+    <h1>Create New List</h1>
+    <input type="text" placeholder="Title goes here..." bind:value={title}>
+    <button id="CreateButton" on:click={Create}>Create list</button>
 </div>
 <div class="screenShade" class:invisible={invisible}/>
 
@@ -99,16 +90,8 @@
         padding: 15px;
     }
     .invisible {
-        pointer-events: none;
         display: none;
-    }
-    #hehehehaw {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        width: 100%;
+        pointer-events: none;
     }
     #CreateButton {
         width: 20%;

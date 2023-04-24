@@ -3,69 +3,12 @@
     import { onMount } from 'svelte';
     import Confirm from '../../lib/components/Confirm.svelte';
     import CreateNew from "../../lib/components/CreateNew.svelte";
+    import CreateList from '../../lib/components/CreateList.svelte';
 
     let mouse = {x: 0, y: 0}
     let currentList = -1;
     let listElements = []
-    let lists = [
-        writable({
-            isMoving: false,
-            title: "Todo",
-            cards: [
-                {
-                    moving: false,
-                    type: "text",
-                    value: "Hello there"
-                },
-                {
-                    moving: false,
-                    type: "text",
-                    value: "HEHEHEHAW"
-                }
-            ],
-            elements: []
-        }),
-        writable({
-            isMoving: false,
-            title: "yup :)",
-            cards: [
-                {
-                    moving: false,
-                    type: "text",
-                    value: "I think Moto moto likes you"
-                }
-            ],
-            elements: []
-        }),
-        writable({
-            isMoving: false,
-            title: "Done",
-            cards: [
-                {
-                    moving: false,
-                    type: "text",
-                    value: "Absolutely nothing"
-                },
-                {
-                    moving: false,
-                    type: "text",
-                    value: "What is this"
-                },
-                {
-                    moving: false,
-                    type: "image",
-                    value: "https://www.xfire.com/wp-content/uploads/2022/08/cropped-walter-white-might-be-headed-to-multiversus-8.jpg.webp"
-                },
-                {
-                    moving: false,
-                    type: "link",
-                    path: "/",
-                    value: "Go back to the homepage :)"
-                }
-            ],
-            elements: []
-        })
-    ]
+    let lists = []
     lists.forEach((list, i) => {
         list.subscribe(value => {
             lists[i] = value;
@@ -244,7 +187,7 @@
 
         // update the bind:this values in all the lists
         for (let i = 0; i < listElements.length; i++) {
-            if(!listElements[i]){
+            if(!listElements[i] || !lists[i]){
                 continue
             }
             const elements = listElements[i].querySelectorAll(".element");
@@ -260,15 +203,12 @@
         currentCard = [-1, -1]
         lists = lists;
     }
-    let listDeleteIndex = -1;
-    let listDelVisible = false;
     function DeleteList(i){
-        listDelVisible = false;
         // lists[i].isMoving = false;
         lists[i].cards = [];
-        lists.splice(i, 1);
+        MoveInArray(lists, i, lists.length - 1)
+        lists.pop()
 
-        listElements.splice(i, 1);
         currentList = -1;
         lists = lists;
         UpdateElementReferences();
@@ -277,13 +217,29 @@
     let newVisible = false;
     function CreateCard(type){
         if(lists.length == 0){
-            alert("You are obligated to create a list before creating a card.")
+            alert("You cannot create a card when there is no list to create it in. 🤓")
             return;
         }
         newType = type;
         newVisible = true;
     }
+    let newListVisible = false;
+    function CreateListWindow(){
+        newListVisible = true;
+    }
+    function AddList(list){
+        newListVisible = false;
+        const title = list.title;
+        if(list.title === ""){
+            alert("Please add a title to your list. 🤓")
+            return;
+        }
+        lists.push(list);
+        lists = lists;
+        
+    }
     function CloseCreateMenu(){
+        newListVisible = false;
         newVisible = false;
     }
     function AddCard(card){
@@ -294,6 +250,13 @@
         lists = lists;
 
         UpdateElementReferences()
+    }
+
+    function Save(){
+        localStorage.setItem("LISTS", JSON.stringify(lists))
+    }
+    function Load(){
+        lists = JSON.parse(localStorage.getItem("LISTS"))
     }
 </script>
 
@@ -308,7 +271,9 @@
         <button class="createNew" on:click={() => {CreateCard("text")}}>Create text card</button>
         <button class="createNew" on:click={() => {CreateCard("image")}}>Create image card</button>
         <button class="createNew" on:click={() => {CreateCard("link")}}>Create link card</button>
+        <button class="createNew" on:click={() => {CreateListWindow()}}>Create new list</button>
         <CreateNew type={newType} invisible={!newVisible} createFunction={AddCard} closeFunction={CloseCreateMenu}></CreateNew>
+        <CreateList  invisible={!newListVisible} createFunction={AddList} closeFunction={CloseCreateMenu}></CreateList>
     </div>
     <!-- Section with all the lists: -->
     <div class="section main">
@@ -343,8 +308,9 @@
         <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving || (currentList != -1 && lists[currentList].isMoving)} on:mouseover={(suii) => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
     </div>
     <!-- Settings menu with save and load: -->
-    <div class="section">
-
+    <div class="section save-load-menu">
+        <button on:click={Save}>Save</button>
+        <button on:click={Load}>Load</button>
     </div>
 </main>
 
@@ -487,6 +453,30 @@
     #deleteButton {
         right: 15px;
         left: auto;
+    }
+    .save-load-menu {
+        display: grid;
+        align-items: stretch;
+        align-content: center;
+        justify-content: space-around;
+        grid-auto-flow: row;
+        grid-template-columns: 35% 35%;
+        grid-template-rows: 45%;
+    }
+    .save-load-menu button {
+        color: var(--text-col);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+
+        background-color: var(--bg-accent);
+        border: none;
+
+        font-size: x-large;
+    }
+    .save-load-menu button:hover {
+        background-color: var(--bg-accent-2);
     }
     .list {
         user-select: none;

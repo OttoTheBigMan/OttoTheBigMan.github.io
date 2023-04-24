@@ -9,7 +9,7 @@
     "src": ".svelte-kit/generated/nodes/0.js"
   },
   ".svelte-kit/generated/nodes/1.js": {
-    "file": "_app/immutable/chunks/1-c8c4044d.js",
+    "file": "_app/immutable/chunks/1-669fb89b.js",
     "imports": [
       "node_modules/@sveltejs/kit/src/runtime/components/error.svelte"
     ],
@@ -17,7 +17,7 @@
     "src": ".svelte-kit/generated/nodes/1.js"
   },
   ".svelte-kit/generated/nodes/10.js": {
-    "file": "_app/immutable/chunks/10-94722aaa.js",
+    "file": "_app/immutable/chunks/10-1af189f7.js",
     "imports": [
       "src/routes/not-trello/+page.svelte"
     ],
@@ -82,7 +82,7 @@
     "src": ".svelte-kit/generated/nodes/3.js"
   },
   ".svelte-kit/generated/nodes/4.js": {
-    "file": "_app/immutable/chunks/4-412962f7.js",
+    "file": "_app/immutable/chunks/4-d438e21c.js",
     "imports": [
       "src/routes/search/[category]/+error.svelte"
     ],
@@ -115,7 +115,7 @@
     "src": ".svelte-kit/generated/nodes/7.js"
   },
   ".svelte-kit/generated/nodes/8.js": {
-    "file": "_app/immutable/chunks/8-078e1fe0.js",
+    "file": "_app/immutable/chunks/8-53cf7791.js",
     "imports": [
       "src/routes/eliza/+page.svelte"
     ],
@@ -162,28 +162,22 @@
       "_index-161b2921.js"
     ]
   },
-  "_index-cf63cc36.js": {
-    "file": "_app/immutable/chunks/index-cf63cc36.js",
-    "imports": [
-      "_index-161b2921.js"
-    ]
-  },
   "_parse-d12b0d5b.js": {
     "file": "_app/immutable/chunks/parse-d12b0d5b.js"
   },
   "_preload-helper-41c905a7.js": {
     "file": "_app/immutable/chunks/preload-helper-41c905a7.js"
   },
-  "_singletons-d2047e0d.js": {
-    "file": "_app/immutable/chunks/singletons-d2047e0d.js",
+  "_singletons-64be1bf2.js": {
+    "file": "_app/immutable/chunks/singletons-64be1bf2.js",
     "imports": [
-      "_index-cf63cc36.js"
+      "_index-161b2921.js"
     ]
   },
-  "_stores-dfcffcb2.js": {
-    "file": "_app/immutable/chunks/stores-dfcffcb2.js",
+  "_stores-9f0a35e0.js": {
+    "file": "_app/immutable/chunks/stores-9f0a35e0.js",
     "imports": [
-      "_singletons-d2047e0d.js"
+      "_singletons-64be1bf2.js"
     ]
   },
   "index.css": {
@@ -237,10 +231,10 @@
       ".svelte-kit/generated/nodes/14.js",
       ".svelte-kit/generated/nodes/15.js"
     ],
-    "file": "_app/immutable/start-d9f54df6.js",
+    "file": "_app/immutable/start-a295b533.js",
     "imports": [
       "_index-161b2921.js",
-      "_singletons-d2047e0d.js",
+      "_singletons-64be1bf2.js",
       "_preload-helper-41c905a7.js",
       "_control-f5b05b5f.js",
       "_parse-d12b0d5b.js"
@@ -249,10 +243,10 @@
     "src": "node_modules/@sveltejs/kit/src/runtime/client/start.js"
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
-    "file": "_app/immutable/components/error.svelte-754c0b80.js",
+    "file": "_app/immutable/components/error.svelte-d386593e.js",
     "imports": [
       "_index-161b2921.js",
-      "_stores-dfcffcb2.js"
+      "_stores-9f0a35e0.js"
     ],
     "isEntry": true,
     "src": "node_modules/@sveltejs/kit/src/runtime/components/error.svelte"
@@ -409,11 +403,11 @@
       "_app/immutable/assets/pico-9ffb10f4.css",
       "_app/immutable/assets/index-72ae4e54.css"
     ],
-    "file": "_app/immutable/components/pages/eliza/_page.svelte-0a890cdf.js",
+    "file": "_app/immutable/components/pages/eliza/_page.svelte-7916649f.js",
     "imports": [
       "_index-161b2921.js",
       "_parse-d12b0d5b.js",
-      "_singletons-d2047e0d.js"
+      "_singletons-64be1bf2.js"
     ],
     "isEntry": true,
     "src": "src/routes/eliza/+page.svelte"
@@ -435,17 +429,16 @@
     "src": "src/routes/memory/+page.svelte"
   },
   "src/routes/not-trello/+page.css": {
-    "file": "_app/immutable/assets/_page-e283747c.css",
+    "file": "_app/immutable/assets/_page-e8f861da.css",
     "src": "src/routes/not-trello/+page.css"
   },
   "src/routes/not-trello/+page.svelte": {
     "css": [
-      "_app/immutable/assets/_page-e283747c.css"
+      "_app/immutable/assets/_page-e8f861da.css"
     ],
-    "file": "_app/immutable/components/pages/not-trello/_page.svelte-8de523be.js",
+    "file": "_app/immutable/components/pages/not-trello/_page.svelte-618262db.js",
     "imports": [
-      "_index-161b2921.js",
-      "_index-cf63cc36.js"
+      "_index-161b2921.js"
     ],
     "isEntry": true,
     "src": "src/routes/not-trello/+page.svelte"
@@ -470,10 +463,10 @@
     "src": "src/routes/search/+page.svelte"
   },
   "src/routes/search/[category]/+error.svelte": {
-    "file": "_app/immutable/components/pages/search/_category_/_error.svelte-72c1a624.js",
+    "file": "_app/immutable/components/pages/search/_category_/_error.svelte-0b23fa91.js",
     "imports": [
       "_index-161b2921.js",
-      "_stores-dfcffcb2.js"
+      "_stores-9f0a35e0.js"
     ],
     "isEntry": true,
     "src": "src/routes/search/[category]/+error.svelte"
