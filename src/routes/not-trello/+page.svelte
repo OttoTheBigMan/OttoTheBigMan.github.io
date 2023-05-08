@@ -304,6 +304,8 @@
         <button class="createNew" on:click={() => {CreateListWindow()}}>Create new list</button>
         <CreateNew type={newType} invisible={!newVisible} createFunction={AddCard} closeFunction={CloseCreateMenu}></CreateNew>
         <CreateList invisible={!newListVisible} createFunction={AddList} closeFunction={CloseCreateMenu}></CreateList>
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving || (currentList != -1 && lists[currentList].isMoving)} on:mouseover={(suii) => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
     </div>
     <!-- Section with all the lists: -->
     <div class="section main">
@@ -338,10 +340,7 @@
                     {/each}
                 </div>
             </div>
-        {/each}
-        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        
-        <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving || (currentList != -1 && lists[currentList].isMoving)} on:mouseover={(suii) => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
+        {/each}        
     </div>
     <!-- Settings menu with save and load: -->
     <div class="section save-load-menu">
