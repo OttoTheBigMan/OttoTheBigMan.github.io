@@ -229,7 +229,6 @@
     }
     function AddList(list){
         newListVisible = false;
-        const title = JSON.parse(JSON.stringify(list.title));
         if(list.title === ""){
             alert("Please add a title to your list. 🤓")
             return;
@@ -383,6 +382,7 @@
         gap: 15px;
         box-sizing: border-box;
         padding: 25px;
+        background-color: transparent;
     }
     #empty-board img {
         aspect-ratio: 1;
@@ -404,7 +404,6 @@
 
         color: var(--text-col);
         font-family: ubuntu;
-
     }
     .section {
         background-color: var(--bg-color);

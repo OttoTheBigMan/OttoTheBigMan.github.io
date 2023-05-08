@@ -1,5 +1,5 @@
 <script>
-    export let invis = false;
+    export let invis = true;
 </script>
 
 <div id="flashbang" class:invis={invis}>

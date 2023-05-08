@@ -43,6 +43,9 @@
 <div class="screenShade" class:invisible={invisible}/>
 
 <style>
+    * {
+        z-index: 32767;
+    }
     /* Copied from +page.svelte in the not-trello folder */
     :root {
         --bg-color: #1f2937;
