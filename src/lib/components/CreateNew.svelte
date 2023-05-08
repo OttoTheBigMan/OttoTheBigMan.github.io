@@ -26,16 +26,18 @@
 <div class="window" class:invisible={invisible}>
     <button id="closeButton" on:click={Close}></button>
     <h1>Create new card</h1>
-    {#if type=="image"}
-        <input type="text" placeholder="Paste image URL..." bind:value={newCard.value}/>
-    {:else if type=="link"}
-        <div id="hehehehaw">
-            <input type="text" placeholder="Link url goes here..." bind:value={newCard.path}>
-            <input type="text" placeholder="Link text goes here..." bind:value={newCard.value}>
-        </div>
-    {:else if type=="text"}
-        <input type="text" placeholder="What to do..." bind:value={newCard.value}>
-    {/if}
+    <form on:submit={Create}>
+        {#if type=="image"}
+            <input type="text" placeholder="Paste image URL..." bind:value={newCard.value}/>
+        {:else if type=="link"}
+            <div id="hehehehaw">
+                <input type="text" placeholder="Link url goes here..." bind:value={newCard.path}>
+                <input type="text" placeholder="Link text goes here..." bind:value={newCard.value}>
+            </div>
+        {:else if type=="text"}
+            <input type="text" placeholder="What to do..." bind:value={newCard.value}>
+        {/if}
+    </form>
     <button id="CreateButton" on:click={Create}>Create card</button>
 </div>
 <div class="screenShade" class:invisible={invisible}/>
@@ -59,6 +61,12 @@
         --dark-text: #E0D6C8;
         --light-text: black;
     }
+    form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-self: center;
+    }
     #closeButton {
         background-color: transparent;
         background-image: url(icons/close.png);
@@ -67,6 +75,10 @@
         height: 75px;
         border: none;
         border-radius: 100%;
+
+        position: absolute;
+        top: 15px;
+        left: 15px;
     }
     .screenShade {
         z-index: 32766;

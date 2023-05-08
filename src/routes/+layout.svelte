@@ -13,9 +13,9 @@
 <div class="{barOpen ? "open" : "closed"} bar">
     {#each linkList as link}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="barLink" onclick="location.href='{link.url}'">
+        <a class="barLink" href="{link.url}">
             {link.text}
-        </div>
+        </a>
         
     {/each}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -86,6 +86,8 @@
         color: black;
 
         overflow: hidden;
+
+        text-decoration: none;
     }
     .barLink:hover {
         background-color: rgba(256,256,256,25%);

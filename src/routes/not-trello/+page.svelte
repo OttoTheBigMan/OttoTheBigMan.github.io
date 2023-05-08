@@ -1,9 +1,9 @@
 <script>
-    import { writable } from 'svelte/store';
     import { onMount } from 'svelte';
-    import Confirm from '../../lib/components/Confirm.svelte';
+    import { fly } from "svelte/transition";
     import CreateNew from "../../lib/components/CreateNew.svelte";
     import CreateList from '../../lib/components/CreateList.svelte';
+    import Heisenberg from '../../lib/components/Heisenberg.svelte';
 
     let mouse = {x: 0, y: 0}
     let currentList = -1;
@@ -229,12 +229,12 @@
     }
     function AddList(list){
         newListVisible = false;
-        const title = list.title;
+        const title = JSON.parse(JSON.stringify(list.title));
         if(list.title === ""){
             alert("Please add a title to your list. 🤓")
             return;
         }
-        lists.push(list);
+        lists.push(JSON.parse(JSON.stringify(list)));
         lists = lists;
         
     }
@@ -245,18 +245,49 @@
     function AddCard(card){
         newVisible = false;
         card.moving = false;
-        lists[0].cards.unshift(JSON.parse(JSON.stringify(card)));
+
+        //Checks if an image url is valid or not
+        if(card.type == "image"){
+            const img = new Image();
+            img.src = JSON.parse(JSON.stringify(card.value))
+
+            img.onload = () => {
+                card.value = img.src;
+
+                lists[0].cards.unshift(JSON.parse(JSON.stringify(card)));
         
-        lists = lists;
+                lists = lists;
 
-        UpdateElementReferences()
+                UpdateElementReferences()
+            }
+            img.onerror = () => {
+                card.value = "/icons/image-not-found.png"
+
+                lists[0].cards.unshift(JSON.parse(JSON.stringify(card)));
+        
+                lists = lists;
+
+                UpdateElementReferences()
+            }
+        }
+        else {
+            lists[0].cards.unshift(JSON.parse(JSON.stringify(card)));
+            
+            lists = lists;
+
+            UpdateElementReferences()
+        }
     }
-
+    let loading = false;;
     function Save(){
         localStorage.setItem("LISTS", JSON.stringify(lists))
     }
     function Load(){
+        loading = true;
         lists = JSON.parse(localStorage.getItem("LISTS"))
+        setTimeout(() => {
+            loading = false;
+        }, lists.length * 250)
     }
 </script>
 
@@ -273,13 +304,19 @@
         <button class="createNew" on:click={() => {CreateCard("link")}}>Create link card</button>
         <button class="createNew" on:click={() => {CreateListWindow()}}>Create new list</button>
         <CreateNew type={newType} invisible={!newVisible} createFunction={AddCard} closeFunction={CloseCreateMenu}></CreateNew>
-        <CreateList  invisible={!newListVisible} createFunction={AddList} closeFunction={CloseCreateMenu}></CreateList>
+        <CreateList invisible={!newListVisible} createFunction={AddList} closeFunction={CloseCreateMenu}></CreateList>
     </div>
     <!-- Section with all the lists: -->
     <div class="section main">
+        {#if lists.length == 0}
+            <div id="empty-board">
+                <img src="/icons/empty.png" alt="yup :)">
+                <h2>There is nothing...</h2>
+            </div>
+        {/if}
         {#each lists as list, i}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="listParent" class:moving={list.isMoving} bind:this={listElements[i]}>
+            <div class="listParent" class:moving={list.isMoving} bind:this={listElements[i]} in:fly = "{{y: -250, duration: 750, delay: loading ? 250 * i : 0}}">
                 <div class="topOfList">
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="icon" src="/icons/moveicon.png" alt="move" on:click={() => {Move(i)}} on:keypress={() => {Move(i)}}>
@@ -311,6 +348,7 @@
     <div class="section save-load-menu">
         <button on:click={Save}>Save</button>
         <button on:click={Load}>Load</button>
+        <Heisenberg></Heisenberg>
     </div>
 </main>
 
@@ -334,6 +372,21 @@
     }
     :global(body){
         overflow: hidden;
+    }
+    #empty-board {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        gap: 15px;
+        box-sizing: border-box;
+        padding: 25px;
+    }
+    #empty-board img {
+        aspect-ratio: 1;
+        height: 65%;
     }
     .bg {
         width: 100vw;

@@ -26,7 +26,7 @@
 <div class="window" class:invisible={invisible}>
     <button id="closeButton" on:click={Close}></button>
     <h1>Create New List</h1>
-    <input type="text" placeholder="Title goes here..." bind:value={title}>
+    <input type="text" placeholder="Title goes here..." bind:value={title} on:submit={Create}>
     <button id="CreateButton" on:click={Create}>Create list</button>
 </div>
 <div class="screenShade" class:invisible={invisible}/>
@@ -58,6 +58,10 @@
         height: 75px;
         border: none;
         border-radius: 100%;
+        
+        position: absolute;
+        top: 15px;
+        left: 15px;
     }
     .screenShade {
         z-index: 32766;
