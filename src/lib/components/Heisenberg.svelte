@@ -33,7 +33,7 @@
         bottom: 0;
         right: 0;
 
-        animation: flashbang 7.5s 1 forwards;
+        animation: flashbang 12.5s 1 forwards;
     }
     @keyframes flashbang {
         from {

@@ -279,7 +279,13 @@
     }
     let loading = false;;
     function Save(){
+        if(lists.length == 0){
+            ShowHeisenberg()
+            
+            return;
+        }
         localStorage.setItem("LISTS", JSON.stringify(lists))
+        alert("This might be temporary but it has been saved :)")
     }
     function Load(){
         loading = true;
@@ -287,6 +293,15 @@
         setTimeout(() => {
             loading = false;
         }, lists.length * 250)
+    }
+    let heisenberg = false;
+    let heisenbergSound = null;
+    function ShowHeisenberg() {
+        heisenberg = true;
+        heisenbergSound.play();
+        setTimeout(() => {
+            heisenberg = false;
+        }, 17500)
     }
 </script>
 
@@ -346,7 +361,8 @@
     <div class="section save-load-menu">
         <button on:click={Save}>Save</button>
         <button on:click={Load}>Load</button>
-        <Heisenberg></Heisenberg>
+        <Heisenberg invis={!heisenberg}></Heisenberg>
+        <audio src="/audio/Heisenberg.mp3" bind:this={heisenbergSound}></audio>
     </div>
 </main>
 
