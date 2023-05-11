@@ -14,7 +14,7 @@
 <style>
     .post {
         margin: 5vh 0;
-        background-color: #313335;
+        background-color: #29313D;
         width: 65%;
         min-height: 75vh;
         max-height: fit-content;
@@ -25,7 +25,7 @@
         padding: 25px;
         box-sizing: border-box;
 
-        box-shadow: 6px 6px #1D1F21;
+        box-shadow: 6px 6px #1f2937;
 
         z-index: 2;
     }

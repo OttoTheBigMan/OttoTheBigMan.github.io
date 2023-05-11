@@ -337,7 +337,7 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="icon" src="/icons/moveicon.png" alt="move" on:click={() => {Move(i)}} on:keypress={() => {Move(i)}}>
                     <h1>{list.title}</h1>
-                    <img class="icon" id="deleteButton" src="/icons/settings.png" alt="delete">
+                    <img class="icon" id="deleteButton" src="/icons/edit.png" alt="delete">
                 </div>
                 
                 <div class="list">
