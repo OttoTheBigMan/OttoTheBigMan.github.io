@@ -4,6 +4,7 @@
     import CreateNew from "../../lib/components/CreateNew.svelte";
     import CreateList from '../../lib/components/CreateList.svelte';
     import Heisenberg from '../../lib/components/Heisenberg.svelte';
+    import SaveNotification from '../../lib/components/SaveNotification.svelte';
 
     let mouse = {x: 0, y: 0}
     let currentList = -1;
@@ -159,8 +160,6 @@
             closestCard[1] = GetClosestIndexInArray(mouse.y, arr)
         }
         else if(lists[i].cards[j].moving){
-            //Snap it to the closest card position.
-
             if(deleteCardHover){
                 DeleteCard(i, j);
                 return;
@@ -180,12 +179,8 @@
         UpdateElementReferences()
     })
     function UpdateElementReferences() {
-
-        // // update the bind:this values in the list
-        // const elements = listElements[listIndex].querySelectorAll(".element");
-        // lists[listIndex].elements = [...elements];
-
         // update the bind:this values in all the lists
+        // bind:this funkar inte men det här funkar så deal with it william
         for (let i = 0; i < listElements.length; i++) {
             if(!listElements[i] || !lists[i]){
                 continue
@@ -278,6 +273,7 @@
         }
     }
     let loading = false;;
+    let saveNotiVis = false;
     function Save(){
         if(lists.length == 0){
             ShowHeisenberg()
@@ -285,7 +281,10 @@
             return;
         }
         localStorage.setItem("LISTS", JSON.stringify(lists))
-        alert("This might be temporary but it has been saved :)")
+        saveNotiVis = true;
+    }
+    function ExitSaveWindow(){
+        saveNotiVis = false;
     }
     function Load(){
         loading = true;
@@ -319,6 +318,7 @@
         <button class="createNew" on:click={() => {CreateListWindow()}}>Create new list</button>
         <CreateNew type={newType} invisible={!newVisible} createFunction={AddCard} closeFunction={CloseCreateMenu}></CreateNew>
         <CreateList invisible={!newListVisible} createFunction={AddList} closeFunction={CloseCreateMenu}></CreateList>
+        <SaveNotification visible={saveNotiVis} exitFunc={ExitSaveWindow}></SaveNotification>
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <div bind:this={deleteCardElement} id="cardDelete" class:fakeHover={deleteCardHover} class:cardIsMoving={cardIsMoving || (currentList != -1 && lists[currentList].isMoving)} on:mouseover={(suii) => {deleteCardHover = true}} on:mouseout={() => {deleteCardHover = false}}> </div>
     </div>
@@ -337,7 +337,6 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <img class="icon" src="/icons/moveicon.png" alt="move" on:click={() => {Move(i)}} on:keypress={() => {Move(i)}}>
                     <h1>{list.title}</h1>
-                    <img class="icon" id="deleteButton" src="/icons/edit.png" alt="delete">
                 </div>
                 
                 <div class="list">
@@ -506,20 +505,18 @@
     }
     .topOfList {
         display: flex;
-        justify-content: space-between;
+        justify-content: left;
         align-items: center;
+        position: relative;
         width: 100%;
         height: 60px;
         padding: 0;
+        gap: 5px;
         margin-bottom: 10px;
     }
     .icon {
         aspect-ratio: 1;
         height: 60px;
-    }
-    #deleteButton {
-        right: 15px;
-        left: auto;
     }
     .save-load-menu {
         display: grid;

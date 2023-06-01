@@ -9,7 +9,8 @@
                         path: undefined,
                         value: ""
                     }
-    function Create(){
+    function Create(event){
+        event.preventDefault();
         newCard.type = type;
         createFunction(newCard);
         newCard.path = ""
@@ -30,15 +31,13 @@
         {#if type=="image"}
             <input type="text" placeholder="Paste image URL..." bind:value={newCard.value}/>
         {:else if type=="link"}
-            <div id="hehehehaw">
-                <input type="text" placeholder="Link url goes here..." bind:value={newCard.path}>
-                <input type="text" placeholder="Link text goes here..." bind:value={newCard.value}>
-            </div>
+            <input type="text" placeholder="Link url goes here..." bind:value={newCard.path}>
+            <input type="text" placeholder="Link text goes here..." bind:value={newCard.value}>
         {:else if type=="text"}
             <input type="text" placeholder="What to do..." bind:value={newCard.value}>
         {/if}
+        <button id="CreateButton" type="submit">Create card</button>
     </form>
-    <button id="CreateButton" on:click={Create}>Create card</button>
 </div>
 <div class="screenShade" class:invisible={invisible}/>
 
@@ -66,9 +65,15 @@
     }
     form {
         width: 100%;
+        height: 100%;
+        gap: 15px;
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
         align-self: center;
+
+        position: relative;
     }
     #closeButton {
         background-color: transparent;
@@ -117,14 +122,6 @@
         pointer-events: none;
         display: none;
     }
-    #hehehehaw {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        width: 100%;
-    }
     #CreateButton {
         width: 20%;
         aspect-ratio: 3 / 1;
@@ -134,6 +131,8 @@
         background-color: var(--bg-accent-2);
         font-size: larger;
         box-shadow: 3px 3px rgba(0,0,0,0.5);
+        position: absolute;
+        bottom: 0;
     }
     #CreateButton:active {
         transform: translate(3px, 3px);

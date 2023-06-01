@@ -26,7 +26,11 @@
 <div class="window" class:invisible={invisible}>
     <button id="closeButton" on:click={Close}></button>
     <h1>Create New List</h1>
-    <input type="text" placeholder="Title goes here..." bind:value={title} on:submit={Create}>
+
+    <form on:submit={Create}>
+        <input type="text" placeholder="Title goes here..." bind:value={title} on:submit={Create}>
+        
+    </form>
     <button id="CreateButton" on:click={Create}>Create list</button>
 </div>
 <div class="screenShade" class:invisible={invisible}/>
@@ -124,5 +128,10 @@
         border: none;
         box-shadow: 3px 3px rgba(0,0,0,0.5);
         text-align: center;
+    }
+    form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 </style>

@@ -1,24 +1,19 @@
 <script>
-    export let visible = false;
-    export let message = "Are you sure you want to delete this item?";
-
-    export let confirmFunc, denyFunc;
-    export let funcArg;
+    export let visible;
+    export let exitFunc;
     function Confirm(){
         confirmFunc(funcArg);
     }
-    function Deny(){
-        denyFunc();
+    function Exit(){
+        exitFunc();
     }
 </script>
 
     <div class:invis={!visible}>
         <div class="window">
-            <h1>{message}</h1>
-            <div class="buttons">
-                <button on:click={Confirm}>Yes</button>
-                <button on:click={Deny}>No</button>
-            </div>
+            <h1>Board saved successfully!</h1>
+            <img src="https://pbs.twimg.com/media/FYWf5ymXEAIBZRk.jpg" alt="dooog">
+            <button on:click={Exit}>Exit</button>
         </div>
         <div class="screenShade"/>
     </div>
@@ -44,13 +39,6 @@
         --dark-bg-accent: #374151;
         --dark-text: #E0D6C8;
         --light-text: black;
-    }
-    .buttons {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 10%;
-        width: 100%;
     }
     button {
         background-color: var(--bg-accent);
@@ -87,6 +75,10 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
+        gap: 10px;
+    }
+    img {
+        border-radius: 15px;
     }
     .screenShade {
         z-index: 32766;
